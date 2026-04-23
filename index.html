@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#F7F9F8" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <title>Fairway</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -18,8 +20,7 @@
         <span class="logo-text">Fairway</span>
       </div>
       <nav class="pill-nav" id="pillNav">
-        <button class="pill-btn active" data-page="dashboard">Dashboard</button>
-        <button class="pill-btn" data-page="scorecards">Scorecards</button>
+        <button class="pill-btn active" data-page="scorecards">Scorecards</button>
         <button class="pill-btn" data-page="stats">Stats</button>
         <div class="pill-slider" id="pillSlider"></div>
       </nav>
@@ -29,38 +30,10 @@
   <!-- Pages -->
   <main class="app-main">
 
-    <!-- DASHBOARD PAGE -->
-    <section class="page active" id="page-dashboard">
-      <div class="page-content">
-
-        <div class="greeting-block">
-          <p class="greeting-sub">Welcome back</p>
-          <h1 class="greeting-title">Your Round,<br>Your Game.</h1>
-        </div>
-
-        <div class="quick-action-card" id="startRoundBtn">
-          <div class="qa-icon">+</div>
-          <div class="qa-text">
-            <span class="qa-title">New Round</span>
-            <span class="qa-sub">Start tracking your scorecard</span>
-          </div>
-          <div class="qa-arrow">›</div>
-        </div>
-
-        <div class="section-title">Recent Rounds</div>
-
-        <div class="rounds-list" id="recentRoundsList">
-          <div class="empty-state">
-            <div class="empty-icon">🏌️</div>
-            <p>No rounds yet. Hit the course!</p>
-          </div>
-        </div>
-
-      </div>
-    </section>
+    
 
     <!-- SCORECARDS PAGE -->
-    <section class="page" id="page-scorecards">
+    <section class="page active" id="page-scorecards">
       <div class="page-content">
 
         <div class="page-header-block">

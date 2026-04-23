@@ -57,7 +57,6 @@ function activatePage(pageId) {
   if (activeBtn) movePillTo(activeBtn);
   if (pageId === 'stats') renderStats();
   if (pageId === 'scorecards') renderScorecards();
-  if (pageId === 'dashboard') renderDashboard();
 }
 
 pillBtns.forEach(btn => {
@@ -68,23 +67,10 @@ pillBtns.forEach(btn => {
 window.addEventListener('load', () => {
   const active = document.querySelector('.pill-btn.active');
   if (active) movePillTo(active);
-  renderDashboard();
+  renderScorecards();
 });
 
-/* ── Dashboard ── */
-function renderDashboard() {
-  const list = document.getElementById('recentRoundsList');
-  const recent = [...state.rounds].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 4);
 
-  if (!recent.length) {
-    list.innerHTML = `<div class="empty-state"><div class="empty-icon">🏌️</div><p>No rounds yet. Hit the course!</p></div>`;
-    return;
-  }
-  list.innerHTML = recent.map(r => roundCardHTML(r)).join('');
-  list.querySelectorAll('.round-card').forEach(card => {
-    card.addEventListener('click', () => openScorecard(card.dataset.id));
-  });
-}
 
 function roundCardHTML(r) {
   const score = totalScore(r);
@@ -183,7 +169,7 @@ function renderStats() {
 
 /* ── New Round Modal ── */
 const newRoundModal   = document.getElementById('newRoundModal');
-const newRoundBtns    = [document.getElementById('startRoundBtn'), document.getElementById('newRoundBtnSC')];
+const newRoundBtns    = [document.getElementById('newRoundBtnSC')];
 const cancelRoundBtn  = document.getElementById('cancelRoundBtn');
 const createRoundBtn  = document.getElementById('createRoundBtn');
 
@@ -278,7 +264,6 @@ saveRoundBtn.addEventListener('click', () => {
   // Scores already saved on input; just close
   save();
   closeScorecard();
-  renderDashboard();
   renderScorecards();
 });
 
@@ -288,7 +273,6 @@ deleteRoundBtn.addEventListener('click', () => {
   state.rounds = state.rounds.filter(r => r.id !== state.activeRoundId);
   save();
   closeScorecard();
-  renderDashboard();
   renderScorecards();
 });
 
@@ -352,4 +336,4 @@ function updateTotals(round) {
 }
 
 /* ── Init ── */
-renderDashboard();
+renderScorecards();
