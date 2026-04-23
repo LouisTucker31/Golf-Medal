@@ -169,7 +169,7 @@ function renderStats() {
 
 /* ── New Round Modal ── */
 const newRoundModal   = document.getElementById('newRoundModal');
-const newRoundBtns    = [document.getElementById('newRoundBtnSC')];
+const newRoundBtns    = [document.getElementById('startRoundBtn'), document.getElementById('newRoundBtnSC')];
 const cancelRoundBtn  = document.getElementById('cancelRoundBtn');
 const createRoundBtn  = document.getElementById('createRoundBtn');
 
@@ -336,4 +336,4 @@ function updateTotals(round) {
 }
 
 /* ── Init ── */
-renderScorecards();
+renderDashboard();
