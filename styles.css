@@ -119,13 +119,24 @@ input, select { font-family: var(--font); }
 
 /* ── Pages ── */
 .page {
-  display: none;
-  animation: fadeSlideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform;
 }
-.page.active { display: block; }
+.page.active {
+  position: relative;
+  opacity: 1;
+  pointer-events: auto;
+}
+.pages-wrapper {
+  position: relative;
+  overflow: hidden;
+}
 
 @keyframes fadeSlideUp {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 1; transform: translateY(0); }
   to   { opacity: 1; transform: translateY(0); }
 }
 

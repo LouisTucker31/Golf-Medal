@@ -47,18 +47,81 @@ function movePillTo(btn) {
   pillSlider.style.width = btnRect.width + 'px';
 }
 
-function activatePage(pageId) {
+const PAGE_ORDER = ['scorecards', 'stats'];
+
+function getPageIndex(pageId) {
+  return PAGE_ORDER.indexOf(pageId);
+}
+
+function activatePage(pageId, animate = true) {
   pillBtns.forEach(b => b.classList.toggle('active', b.dataset.page === pageId));
   pages.forEach(p => {
     const active = p.id === 'page-' + pageId;
     p.classList.toggle('active', active);
+    p.style.transform = '';
+    p.style.transition = animate ? 'transform 0.38s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.38s ease' : '';
+    p.style.opacity = active ? '1' : '0';
+    p.style.pointerEvents = active ? 'auto' : 'none';
   });
   const activeBtn = document.querySelector(`.pill-btn[data-page="${pageId}"]`);
   if (activeBtn) movePillTo(activeBtn);
   if (pageId === 'stats') renderStats();
   if (pageId === 'scorecards') renderScorecards();
   if (pageId === 'dashboard') renderDashboard();
+  state.currentPage = pageId;
 }
+
+/* ── Swipe gesture ── */
+(function () {
+  const main = document.querySelector('.app-main');
+  let startX = 0, startY = 0, dragging = false, dx = 0;
+  const THRESHOLD = 50;
+
+  main.addEventListener('touchstart', e => {
+    if (e.touches.length !== 1) return;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    dragging = false;
+    dx = 0;
+  }, { passive: true });
+
+  main.addEventListener('touchmove', e => {
+    if (e.touches.length !== 1) return;
+    const moveX = e.touches[0].clientX - startX;
+    const moveY = e.touches[0].clientY - startY;
+
+    if (!dragging) {
+      if (Math.abs(moveY) > Math.abs(moveX)) return; // vertical scroll wins
+      dragging = true;
+    }
+
+    dx = moveX;
+    const currentIdx = getPageIndex(state.currentPage);
+    const w = window.innerWidth;
+
+    pages.forEach(p => {
+      const pId = p.id.replace('page-', '');
+      const pIdx = getPageIndex(pId);
+      const offset = (pIdx - currentIdx) * w + dx;
+      p.style.transition = 'none';
+      p.style.transform = `translateX(${offset}px)`;
+      p.style.opacity = pIdx === currentIdx ? '1'
+        : pIdx === currentIdx + (dx < 0 ? 1 : -1) ? String(Math.min(Math.abs(dx) / w, 1)) : '0';
+      p.style.pointerEvents = 'none';
+    });
+  }, { passive: true });
+
+  main.addEventListener('touchend', () => {
+    if (!dragging) return;
+    const currentIdx = getPageIndex(state.currentPage);
+    const goNext = dx < -THRESHOLD && currentIdx < PAGE_ORDER.length - 1;
+    const goPrev = dx > THRESHOLD  && currentIdx > 0;
+    const targetPage = goNext ? PAGE_ORDER[currentIdx + 1]
+                     : goPrev ? PAGE_ORDER[currentIdx - 1]
+                     : state.currentPage;
+    activatePage(targetPage, true);
+  });
+})();
 
 pillBtns.forEach(btn => {
   btn.addEventListener('click', () => activatePage(btn.dataset.page));
