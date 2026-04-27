@@ -125,6 +125,11 @@
     if (savedHI !== null) fieldHI.value = savedHI;
     if (currentCourse) {
       prefillModal(currentCourse);
+      // Re-show estimated warning if applicable after modal closes
+      const hi = Storage.getHI();
+      if (hi !== null) {
+        UI.showResults(currentCourse, hi, () => openModalForEstimated(currentCourse, hi));
+      }
     } else {
       clearModalForm();
       if (savedHI !== null) fieldHI.value = savedHI;
@@ -153,7 +158,8 @@
     Storage.saveHI(hi);
 
     // Rename — name changed (including case-only changes)
-    if (currentCourse && name !== currentCourse.name) {
+    if (currentCourse && name !== currentCourse.name &&
+        currentCourse._source !== 'api') {
       const alreadyExists = Storage.getCourses()
         .find(c => c.name.toLowerCase() === name.toLowerCase());
 
@@ -172,7 +178,7 @@
     }
 
     // If nothing has changed except holes or HI, just recalculate without saving
-    if (currentCourse && name.toLowerCase() === currentCourse.name.toLowerCase()) {
+    if (currentCourse && name === currentCourse.name) {
       const existingStats = holes === 'front9' ? currentCourse.statsFront
                           : holes === 'back9'  ? currentCourse.statsBack
                           : currentCourse.stats18;
@@ -214,10 +220,12 @@
       showSavePrompt(name, () => {
         const merged = buildCourse(name, holes, par, cr, sr, existingCourse);
         Storage.saveCourse(merged);
-        currentCourse = merged;
-        searchInput.value = merged.name;
+        currentCourse = Storage.getCourses()
+          .find(c => c.name.toLowerCase() === name.toLowerCase()) || merged;
+        currentCourse.holes = holes;
+        searchInput.value = currentCourse.name;
         UI.closeModal();
-        UI.showResults(merged, hi, () => openModalForEstimated(merged, hi));
+        UI.showResults(currentCourse, hi, () => openModalForEstimated(currentCourse, hi));
       }, () => {
         fieldName.value = '';
         fieldName.placeholder = todayName();
@@ -230,10 +238,13 @@
 
     const course = buildCourse(name, holes, par, cr, sr, null);
     Storage.saveCourse(course);
-    currentCourse = course;
-    searchInput.value = course.name;
+    // Reload from storage so _source is correct for future edits
+    currentCourse = Storage.getCourses()
+      .find(c => c.name.toLowerCase() === name.toLowerCase()) || course;
+    currentCourse.holes = holes;
+    searchInput.value = currentCourse.name;
     UI.closeModal();
-    UI.showResults(course, hi, () => openModalForEstimated(course, hi));
+    UI.showResults(currentCourse, hi, () => openModalForEstimated(currentCourse, hi));
   }
 
   function buildCourse(name, holes, par, cr, sr, existing) {
