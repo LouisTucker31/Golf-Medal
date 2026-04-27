@@ -13,6 +13,8 @@
 <body>
 
   <div class="stats-app">
+
+    <!-- Header -->
     <header class="stats-header">
       <a href="launcher.html" class="back-btn">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -20,13 +22,120 @@
         </svg>
       </a>
       <h1 class="stats-title">Stats</h1>
+      <select class="stats-filter" id="statsFilter">
+        <option value="all">All Time</option>
+        <option value="year">This Year</option>
+        <option value="last20">Last 20 Rounds</option>
+        <option value="last10">Last 10 Rounds</option>
+        <option value="last5">Last 5 Rounds</option>
+      </select>
     </header>
 
-    <div class="stats-empty">
-      <span class="stats-empty-icon">📊</span>
-      <p class="stats-empty-text">Round tracking coming soon.</p>
-    </div>
+    <!-- Overview -->
+    <section class="stats-section">
+      <h2 class="stats-section-title">Overview</h2>
+
+      <div class="stat-grid">
+        <div class="stat-card stat-card--large">
+          <span class="stat-label">Handicap</span>
+          <span class="stat-value" id="statHandicap">—</span>
+        </div>
+        <div class="stat-card stat-card--large">
+          <span class="stat-label">Rounds</span>
+          <span class="stat-value" id="statRounds">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Avg Gross</span>
+          <span class="stat-value" id="statAvgGross">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Avg Differential</span>
+          <span class="stat-value" id="statAvgDiff">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Avg Over Par</span>
+          <span class="stat-value" id="statAvgOver">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Best Round</span>
+          <span class="stat-value stat-value--gold" id="statBest">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Worst Round</span>
+          <span class="stat-value" id="statWorst">—</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Shot Overview -->
+    <section class="stats-section">
+      <h2 class="stats-section-title">Shot Overview</h2>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <span class="stat-label">GIR</span>
+          <span class="stat-value" id="statGIR">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Fairways Hit</span>
+          <span class="stat-value" id="statFairways">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Putts / Round</span>
+          <span class="stat-value" id="statPutts">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Scrambling</span>
+          <span class="stat-value" id="statScrambling">—</span>
+        </div>
+      </div>
+
+      <div class="chart-wrap" id="shotChart"></div>
+
+      <p class="ai-summary" id="aiShot"></p>
+    </section>
+
+    <!-- Recoveries -->
+    <section class="stats-section">
+      <h2 class="stats-section-title">Recoveries</h2>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <span class="stat-label">Up &amp; Down</span>
+          <span class="stat-value" id="statUpDown">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Sand Save</span>
+          <span class="stat-value" id="statSandSave">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Avg Penalties</span>
+          <span class="stat-value" id="statPenalties">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Avg Recoveries</span>
+          <span class="stat-value" id="statRecoveries">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Avg Bunkers</span>
+          <span class="stat-value" id="statBunkers">—</span>
+        </div>
+      </div>
+
+      <div class="chart-wrap" id="recoveryChart"></div>
+
+      <p class="ai-summary" id="aiRecovery"></p>
+    </section>
+
   </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/stats-data.js"></script>
+  <script src="js/stats-calc.js"></script>
+  <script src="js/stats-charts.js"></script>
+  <script src="js/stats-ai.js"></script>
+  <script src="js/stats-ui.js"></script>
+  <script src="js/stats-app.js"></script>
 
 </body>
 </html>

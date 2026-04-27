@@ -1,4 +1,4 @@
-/* ── Stats app ── */
+/* ── Stats App ── */
 .stats-app {
   max-width: 480px;
   margin: 0 auto;
@@ -48,6 +48,133 @@
   color: var(--text-primary);
   letter-spacing: -0.02em;
   line-height: 1;
+  flex: 1;
+}
+
+/* ── Filter ── */
+.stats-filter {
+  height: 36px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 100px;
+  padding: 0 28px 0 14px;
+  font-size: 0.78rem;
+  font-family: var(--font-body);
+  font-weight: 500;
+  color: var(--text-secondary);
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23b0a898' stroke-width='1.6' stroke-linecap='round'%3E%3Cpolyline points='5 8 10 13 15 8'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 14px;
+  flex-shrink: 0;
+}
+
+/* ── Sections ── */
+.stats-section {
+  margin-bottom: 40px;
+}
+
+.stats-section-title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  margin-bottom: 16px;
+}
+
+/* ── Stat grid ── */
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-card--large {
+  grid-column: span 1;
+}
+
+.stat-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+  color: var(--text-tertiary);
+}
+
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stat-value--gold {
+  color: var(--gold);
+}
+
+/* ── Trend icons ── */
+.trend {
+  font-style: normal;
+  font-size: 1rem;
+  font-family: var(--font-body);
+}
+
+.trend--up     { color: #2e7d32; }
+.trend--down   { color: #c0392b; }
+.trend--steady { color: var(--text-tertiary); }
+.trend--dash   { color: var(--border); }
+
+/* ── Charts ── */
+.chart-wrap {
+  width: 100%;
+  margin-bottom: 16px;
+  min-height: 60px;
+}
+
+.chart-empty {
+  font-size: 0.83rem;
+  color: var(--text-tertiary);
+  text-align: center;
+  padding: 20px 0;
+}
+
+/* ── AI Summary ── */
+.ai-summary {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-weight: 300;
+  font-style: italic;
+  padding: 12px 0 0;
+  border-top: 1px solid var(--border-light);
+}
+
+.ai-cached {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+  margin-top: 4px;
+  font-style: normal;
 }
 
 /* ── Empty state ── */

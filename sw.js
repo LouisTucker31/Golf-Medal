@@ -21,6 +21,16 @@ const STATIC_ASSETS = [
   './js/sheet.js',
   './js/stableford.js',
   './js/app.js',
+  './js/stats-data.js',
+  './js/stats-calc.js',
+  './js/stats-charts.js',
+  './js/stats-ai.js',
+  './js/stats-ui.js',
+  './js/stats-app.js',
+  './css/stats.css',
+  './css/launcher.css',
+  './stats.html',
+  './launcher.html',
   'https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap'
 ];
 

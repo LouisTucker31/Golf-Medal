@@ -1,0 +1,48 @@
+// ── Stats AI Summaries ──
+const StatsAI = (() => {
+
+  async function generate(type, stats, handicap, cacheKey) {
+    // Return cached if offline or exists
+    const cached = StatsData.getAICache(cacheKey);
+    if (!navigator.onLine) {
+      return cached ? { text: cached.text, cached: true, updatedAt: cached.updatedAt } : null;
+    }
+
+    const prompts = {
+      shot: `You are a golf coach. A golfer with a ${handicap} handicap has these stats:
+GIR: ${stats.gir ?? 'unknown'}%, Fairways: ${stats.fairways ?? 'unknown'}%, Putts per round: ${stats.putts ?? 'unknown'}, Scrambling: ${stats.scrambling ?? 'unknown'}%.
+Write 2 sentences identifying their biggest weakness and one specific thing to focus on in practice. Be direct and encouraging. No preamble.`,
+
+      recovery: `You are a golf coach. A golfer with a ${handicap} handicap has these stats:
+Up & Down: ${stats.updown ?? 'unknown'}%, Sand Save: ${stats.sandsave ?? 'unknown'}%, Avg penalties: ${stats.penalties ?? 'unknown'}, Avg bunkers: ${stats.bunkers ?? 'unknown'} per round.
+Write 2 sentences identifying their biggest weakness in the short game/recovery area and one specific thing to focus on. Be direct and encouraging. No preamble.`
+    };
+
+    try {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type':  'application/json',
+          'Authorization': `Bearer ${CONFIG.OPENAI_KEY}`
+        },
+        body: JSON.stringify({
+          model:       'gpt-4o-mini',
+          max_tokens:  120,
+          messages: [{ role: 'user', content: prompts[type] }]
+        })
+      });
+
+      const data = await response.json();
+      const text = data.choices?.[0]?.message?.content?.trim();
+      if (text) {
+        StatsData.saveAICache(cacheKey, text);
+        return { text, cached: false };
+      }
+      return cached ? { text: cached.text, cached: true, updatedAt: cached.updatedAt } : null;
+    } catch {
+      return cached ? { text: cached.text, cached: true, updatedAt: cached.updatedAt } : null;
+    }
+  }
+
+  return { generate };
+})();
