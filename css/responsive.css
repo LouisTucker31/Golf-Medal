@@ -1,5 +1,12 @@
 /* ── Responsive & accessibility ── */
 
+/* Safe area header push for all mobiles */
+@media (max-width: 768px) {
+  .app-header {
+    padding-top: max(48px, calc(env(safe-area-inset-top) + 24px));
+  }
+}
+
 /* Small devices (iPhone SE: 375px and below) */
 @media (max-width: 375px) {
   .app-title {
