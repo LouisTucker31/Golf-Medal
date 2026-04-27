@@ -80,37 +80,18 @@ input, select, button, textarea {
   letter-spacing: 0.01em;
 }
 
-/* ── Back button (medal page) ── */
-.medal-back-btn {
-  position: absolute;
-  top: max(16px, calc(env(safe-area-inset-top) + 8px));
-  left: max(20px, env(safe-area-inset-left));
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: 50%;
-  color: var(--text-secondary);
+/* ── Header link ── */
+.header-link {
   text-decoration: none;
-  transition: all var(--transition);
+  color: inherit;
+  display: block;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.medal-back-btn svg {
-  width: 16px;
-  height: 16px;
-}
-
-.medal-back-btn:hover {
-  background: var(--bg);
-  border-color: var(--accent);
-  color: var(--text-primary);
-}
-
-.app-header {
-  position: relative;
+.header-link:hover .app-title,
+.header-link:hover .stats-title {
+  opacity: 0.7;
+  transition: opacity var(--transition);
 }
 
 /* ── Utility ── */
