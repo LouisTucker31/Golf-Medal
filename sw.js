@@ -2,6 +2,7 @@ const STATIC_CACHE = 'medal-golf-static-v2';
 const API_CACHE    = 'medal-golf-api-v1';
 
 const STATIC_ASSETS = [
+  './index.html',
   './launcher.html',
   './stats.html',
   './medal.html',
