@@ -2,7 +2,7 @@
   "name": "Medal Golf",
   "short_name": "Medal Golf",
   "description": "Enter your course, see your medals.",
-  "start_url": "/",
+  "start_url": "./index.html",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#f5f0e8",

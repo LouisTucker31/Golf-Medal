@@ -1,17 +1,16 @@
 const CACHE = 'medal-golf-v1';
 
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/css/base.css',
-  '/css/search.css',
-  '/css/results.css',
-  '/css/modal.css',
-  '/css/responsive.css',
-  '/js/storage.js',
-  '/js/calculator.js',
-  '/js/ui.js',
-  '/js/app.js',
+  './index.html',
+  './css/base.css',
+  './css/search.css',
+  './css/results.css',
+  './css/modal.css',
+  './css/responsive.css',
+  './js/storage.js',
+  './js/calculator.js',
+  './js/ui.js',
+  './js/app.js',
   'https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap'
 ];
 
