@@ -24,9 +24,9 @@ const Stableford = (() => {
         bronze: document.getElementById('bronzeRange').textContent,
       };
 
-      document.getElementById('goldRange').textContent   = `${GOLD_LOW}–${GOLD_HIGH} pts`;
-      document.getElementById('silverRange').textContent = `${SILVER_LOW}–${SILVER_HIGH} pts`;
-      document.getElementById('bronzeRange').textContent = `${BRONZE_LOW}–${BRONZE_HIGH} pts`;
+      document.getElementById('goldRange').textContent   = `${GOLD_LOW}–${GOLD_HIGH}`;
+      document.getElementById('silverRange').textContent = `${SILVER_LOW}–${SILVER_HIGH}`;
+      document.getElementById('bronzeRange').textContent = `${BRONZE_LOW}–${BRONZE_HIGH}`;
       btn.classList.add('active');
     }
 
