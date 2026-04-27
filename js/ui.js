@@ -68,6 +68,8 @@ const UI = (() => {
   function hideResults() {
     resultsSection.classList.add('hidden');
     emptyState.classList.remove('hidden');
+    const stablefordBtn = document.getElementById('stablefordBtn');
+    if (stablefordBtn) stablefordBtn.classList.remove('active');
   }
 
   function updateHIButton(hi) {

@@ -192,6 +192,7 @@
   });
 
   Sheet.init();
+  Stableford.init();
 
   // ── Edit HI ──
   hiEditBtn.addEventListener('click', () => {
