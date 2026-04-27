@@ -88,16 +88,7 @@
     if (e.target === modalBackdrop) UI.closeModal();
   });
 
-  // Swipe down to dismiss
-  let touchStartY = 0;
-  const modalEl = document.getElementById('addCourseModal');
-  modalEl.addEventListener('touchstart', (e) => {
-    touchStartY = e.touches[0].clientY;
-  }, { passive: true });
-  modalEl.addEventListener('touchend', (e) => {
-    const delta = e.changedTouches[0].clientY - touchStartY;
-    if (delta > 60) UI.closeModal();
-  }, { passive: true });
+  Sheet.init();
 
   // ── Edit HI ──
   hiEditBtn.addEventListener('click', () => {
