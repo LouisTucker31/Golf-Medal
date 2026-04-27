@@ -164,14 +164,26 @@
         .find(c => c.name.toLowerCase() === name.toLowerCase());
 
       if (!alreadyExists) {
-        // Clean rename — delete old, save under new name
-        Storage.deleteCourse(currentCourse.name);
-        const renamed = { ...currentCourse, name, holes };
-        Storage.saveCourse(renamed);
-        currentCourse = renamed;
-        searchInput.value = renamed.name;
-        UI.closeModal();
-        UI.showResults(renamed, hi, () => openModalForEstimated(renamed, hi));
+        // Prompt — update existing name or save as new course
+        showSavePrompt(currentCourse.name, () => {
+          // Rename existing
+          Storage.deleteCourse(currentCourse.name);
+          const renamed = { ...currentCourse, name, holes };
+          Storage.saveCourse(renamed);
+          currentCourse = renamed;
+          searchInput.value = renamed.name;
+          UI.closeModal();
+          UI.showResults(renamed, hi, () => openModalForEstimated(renamed, hi));
+        }, () => {
+          // Save as new — keep old, create fresh
+          const course = buildCourse(name, holes, par, cr, sr, null);
+          Storage.saveCourse(course);
+          currentCourse = course;
+          currentCourse.holes = holes;
+          searchInput.value = course.name;
+          UI.closeModal();
+          UI.showResults(course, hi, () => openModalForEstimated(course, hi));
+        });
         return;
       }
       // Name already taken — fall through to doSave which will prompt
@@ -344,6 +356,14 @@
     fieldPar.value = stats?.par ?? course.par ?? '';
     fieldCR.value  = stats?.cr  ?? course.cr  ?? '';
     fieldSR.value  = stats?.sr  ?? course.sr  ?? '';
+
+    // Show estimated note if these stats are auto-derived
+    const estimatedNote = document.getElementById('estimatedNote');
+    if (stats?.estimated) {
+      estimatedNote.classList.remove('hidden');
+    } else {
+      estimatedNote.classList.add('hidden');
+    }
   }
 
   function updateParForHoles(course) {
@@ -353,15 +373,23 @@
                 : holes === 'back9'  ? course.statsBack
                 : course.stats18;
 
+    const estimatedNote = document.getElementById('estimatedNote');
+
     if (stats) {
       fieldPar.value = stats.par ?? '';
       fieldCR.value  = stats.cr  ?? '';
       fieldSR.value  = stats.sr  ?? '';
+      if (stats.estimated) {
+        estimatedNote.classList.remove('hidden');
+      } else {
+        estimatedNote.classList.add('hidden');
+      }
     } else {
       const fullPar  = course.par || '';
       fieldPar.value = holes === '18' ? fullPar : Math.round(fullPar / 2) || '';
       fieldCR.value  = course.cr || '';
       fieldSR.value  = course.sr || '';
+      estimatedNote.classList.add('hidden');
     }
   }
 
