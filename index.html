@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>Medal Golf</title>
   <link rel="manifest" href="manifest.json" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Medal Golf" />
   <link rel="apple-touch-icon" href="icons/icon-180.png" />
@@ -110,6 +110,11 @@
           <input class="field-input" type="text" id="fieldName" placeholder="e.g. St Andrews Links" />
         </div>
 
+        <div class="field-group hidden" id="teeFieldGroup">
+          <label class="field-label" for="fieldTee">Tee</label>
+          <select class="field-input field-select" id="fieldTee"></select>
+        </div>
+
         <div class="field-row">
           <div class="field-group">
             <label class="field-label" for="fieldHoles">Holes</label>
@@ -117,6 +122,7 @@
               <option value="18">18 holes</option>
               <option value="front9">Front 9</option>
               <option value="back9">Back 9</option>
+              <option value="9" hidden>9 holes</option>
             </select>
           </div>
           <div class="field-group">

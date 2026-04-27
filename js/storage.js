@@ -60,9 +60,24 @@ const Storage = (() => {
     localStorage.setItem('handicap_last_course', JSON.stringify(course));
   }
 
+  function getLastTee(courseName) {
+    try {
+      const map = JSON.parse(localStorage.getItem('handicap_tees')) || {};
+      return map[courseName.toLowerCase()] || null;
+    } catch { return null; }
+  }
+
+  function saveLastTee(courseName, teeName) {
+    try {
+      const map = JSON.parse(localStorage.getItem('handicap_tees')) || {};
+      map[courseName.toLowerCase()] = teeName;
+      localStorage.setItem('handicap_tees', JSON.stringify(map));
+    } catch {}
+  }
+
   function clearLastCourse() {
     localStorage.removeItem('handicap_last_course');
   }
 
-  return { getCourses, saveCourse, searchCourses, getHI, saveHI, deleteCourse, getLastCourse, saveLastCourse, clearLastCourse };
+  return { getCourses, saveCourse, searchCourses, getHI, saveHI, deleteCourse, getLastCourse, saveLastCourse, clearLastCourse, getLastTee, saveLastTee };
 })();

@@ -23,63 +23,66 @@ const API = (() => {
    * Picks the first tee set returned.
    */
   function normaliseCourse(apiCourse) {
-    const tees = apiCourse.tees?.male?.[0]
-               || apiCourse.tees?.female?.[0]
-               || null;
-
-    // Strip any trailing number codes e.g. "Bulbury Woods Golf Club (1002886)"
     const cleanName = (apiCourse.club_name || '').replace(/\s*\(\d+\)\s*$/, '').trim();
     const baseName  = cleanName;
-
-    // Only append course name if it adds something not already in the club name
     const courseSuffix = apiCourse.course_name &&
       !cleanName.toLowerCase().includes(apiCourse.course_name.toLowerCase())
         ? ` – ${apiCourse.course_name}`
         : '';
 
-    const apiHoles = tees?.number_of_holes || 18;
-    const apiPar   = tees?.par_total       || null;
-    const apiCr    = tees?.course_rating   || null;
-    const apiSr    = tees?.slope_rating    || null;
-
-    const is9hole  = apiHoles === 9;
-    const fullPar  = is9hole ? apiPar * 2 : apiPar;
-    const fullCr   = is9hole ? parseFloat((apiCr * 2).toFixed(1)) : apiCr;
-    const fullSr   = apiSr;
-
-    const hasFrontBack = !!(tees?.front_course_rating && tees?.back_course_rating);
+    const allTees = buildTeeOptions(apiCourse);
+    // Default to second longest tee (index 1), fallback to first
+    const defaultTee = allTees[1] || allTees[0] || null;
 
     return {
-      _source: 'api',
-      name:    baseName + courseSuffix,
-      holes:   '18',
-      stats18: {
-        par: fullPar, cr: fullCr, sr: fullSr, estimated: false
-      },
-      statsFront: {
-        par: tees?.front_course_rating ? Math.round(fullPar / 2) : Math.round(fullPar / 2),
-        cr:  tees?.front_course_rating || parseFloat((fullCr / 2).toFixed(1)),
-        sr:  tees?.front_slope_rating  || fullSr,
-        estimated: !hasFrontBack
-      },
-      statsBack: {
-        par: tees?.back_course_rating ? Math.round(fullPar / 2) : Math.round(fullPar / 2),
-        cr:  tees?.back_course_rating  || parseFloat((fullCr / 2).toFixed(1)),
-        sr:  tees?.back_slope_rating   || fullSr,
-        estimated: !hasFrontBack
-      },
-      tees: buildTeeOptions(apiCourse),
-      _raw: apiCourse,
+      _source:    'api',
+      name:       baseName + courseSuffix,
+      holes:      '18',
+      allTees,
+      selectedTee: defaultTee,
+      stats18: defaultTee ? {
+        par: defaultTee.par_total,
+        cr:  defaultTee.course_rating,
+        sr:  defaultTee.slope_rating,
+        estimated: false
+      } : null,
+      statsFront: defaultTee ? {
+        par: Math.round(defaultTee.par_total / 2),
+        cr:  defaultTee.front_course_rating || parseFloat((defaultTee.course_rating / 2).toFixed(1)),
+        sr:  defaultTee.front_slope_rating  || defaultTee.slope_rating,
+        estimated: !defaultTee.front_course_rating
+      } : null,
+      statsBack: defaultTee ? {
+        par: Math.round(defaultTee.par_total / 2),
+        cr:  defaultTee.back_course_rating  || parseFloat((defaultTee.course_rating / 2).toFixed(1)),
+        sr:  defaultTee.back_slope_rating   || defaultTee.slope_rating,
+        estimated: !defaultTee.back_course_rating
+      } : null,
     };
   }
 
   function buildTeeOptions(apiCourse) {
-    const options = [];
     const male   = apiCourse.tees?.male   || [];
     const female = apiCourse.tees?.female || [];
-    male.forEach(t =>   options.push({ ...t, gender: 'Male' }));
-    female.forEach(t => options.push({ ...t, gender: 'Female' }));
-    return options;
+    const all    = [...male, ...female];
+
+    return all
+      // Exclude winter tees
+      .filter(t => !t.tee_name?.toLowerCase().includes('winter'))
+      // Sort by total_yards descending
+      .sort((a, b) => (b.total_yards || 0) - (a.total_yards || 0))
+      .map(t => ({
+        tee_name:            t.tee_name || 'Standard',
+        course_rating:       t.course_rating,
+        slope_rating:        t.slope_rating,
+        par_total:           t.par_total,
+        number_of_holes:     t.number_of_holes,
+        total_yards:         t.total_yards,
+        front_course_rating: t.front_course_rating || null,
+        front_slope_rating:  t.front_slope_rating  || null,
+        back_course_rating:  t.back_course_rating  || null,
+        back_slope_rating:   t.back_slope_rating   || null,
+      }));
   }
 
   return { searchCourses, normaliseCourse };

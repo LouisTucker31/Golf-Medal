@@ -17,6 +17,8 @@
   const fieldCR    = document.getElementById('fieldCR');
   const fieldSR    = document.getElementById('fieldSR');
   const fieldHI    = document.getElementById('fieldHI');
+  const fieldTee   = document.getElementById('fieldTee');
+  const teeFieldGroup = document.getElementById('teeFieldGroup');
 
   let currentCourse = null;
 
@@ -103,11 +105,38 @@
     course._fullPar  = course.par;
     course._apiHoles = 18;
     course.holes     = '18';
-    currentCourse    = course;
+
+    // Restore last used tee for this course
+    if (course._source === 'api' && course.allTees?.length > 0) {
+      const lastTeeName = Storage.getLastTee(course.name);
+      const lastTee     = lastTeeName
+        ? course.allTees.find(t => t.tee_name === lastTeeName)
+        : null;
+      const tee = lastTee || course.allTees[1] || course.allTees[0];
+      course.selectedTee = tee;
+      course.stats18     = { par: tee.par_total, cr: tee.course_rating, sr: tee.slope_rating, estimated: false };
+      course.statsFront  = {
+        par: Math.round(tee.par_total / 2),
+        cr:  tee.front_course_rating || parseFloat((tee.course_rating / 2).toFixed(1)),
+        sr:  tee.front_slope_rating  || tee.slope_rating,
+        estimated: !tee.front_course_rating
+      };
+      course.statsBack   = {
+        par: Math.round(tee.par_total / 2),
+        cr:  tee.back_course_rating  || parseFloat((tee.course_rating / 2).toFixed(1)),
+        sr:  tee.back_slope_rating   || tee.slope_rating,
+        estimated: !tee.back_course_rating
+      };
+    }
+
+    currentCourse     = course;
     searchInput.value = course.name;
 
     const hi = Storage.getHI();
     if (hi !== null) {
+      if (course._source === 'api' && course.selectedTee) {
+        Storage.saveLastTee(course.name, course.selectedTee.tee_name);
+      }
       Storage.saveLastCourse(course);
       UI.showResults(course, hi, () => openModalForEstimated(course, hi));
     } else {
@@ -118,6 +147,31 @@
 
   // ── Auto-populate par when holes changes ──
   fieldHoles.addEventListener('change', () => {
+    updateParForHoles(currentCourse);
+  });
+
+  // ── Tee change ──
+  fieldTee.addEventListener('change', () => {
+    if (!currentCourse?.allTees) return;
+    const selected = currentCourse.allTees.find(t => t.tee_name === fieldTee.value);
+    if (!selected) return;
+    // Update currentCourse stats from selected tee
+    currentCourse.selectedTee = selected;
+    currentCourse.stats18     = {
+      par: selected.par_total, cr: selected.course_rating, sr: selected.slope_rating, estimated: false
+    };
+    currentCourse.statsFront  = {
+      par: Math.round(selected.par_total / 2),
+      cr:  selected.front_course_rating || parseFloat((selected.course_rating / 2).toFixed(1)),
+      sr:  selected.front_slope_rating  || selected.slope_rating,
+      estimated: !selected.front_course_rating
+    };
+    currentCourse.statsBack   = {
+      par: Math.round(selected.par_total / 2),
+      cr:  selected.back_course_rating  || parseFloat((selected.course_rating / 2).toFixed(1)),
+      sr:  selected.back_slope_rating   || selected.slope_rating,
+      estimated: !selected.back_course_rating
+    };
     updateParForHoles(currentCourse);
   });
 
@@ -291,6 +345,9 @@
       .find(c => c.name.toLowerCase() === name.toLowerCase()) || course;
     currentCourse.holes = holes;
     searchInput.value = currentCourse.name;
+    if (currentCourse._source === 'api' && currentCourse.selectedTee) {
+      Storage.saveLastTee(currentCourse.name, currentCourse.selectedTee.tee_name);
+    }
     Storage.saveLastCourse(currentCourse);
     UI.closeModal();
     UI.showResults(currentCourse, hi, () => openModalForEstimated(currentCourse, hi));
@@ -386,6 +443,19 @@
 
     fieldHoles.value = savedHoles;
 
+    // Tee dropdown — only for API courses
+    if (course._source === 'api' && course.allTees?.length > 0) {
+      teeFieldGroup.classList.remove('hidden');
+      fieldTee.innerHTML = course.allTees
+        .map(t => `<option value="${t.tee_name}">${t.tee_name}</option>`)
+        .join('');
+      const selectedName = course.selectedTee?.tee_name || course.allTees[1]?.tee_name || course.allTees[0]?.tee_name;
+      fieldTee.value = selectedName;
+    } else {
+      teeFieldGroup.classList.add('hidden');
+      fieldTee.innerHTML = '';
+    }
+
     const stats = savedHoles === 'front9' ? course.statsFront
                 : savedHoles === 'back9'  ? course.statsBack
                 : course.stats18;
@@ -394,7 +464,6 @@
     fieldCR.value  = stats?.cr  ?? course.cr  ?? '';
     fieldSR.value  = stats?.sr  ?? course.sr  ?? '';
 
-    // Show estimated note if these stats are auto-derived
     const estimatedNote = document.getElementById('estimatedNote');
     if (stats?.estimated) {
       estimatedNote.classList.remove('hidden');
