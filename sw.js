@@ -10,6 +10,7 @@ const ASSETS = [
   './js/storage.js',
   './js/calculator.js',
   './js/ui.js',
+  './js/api.js',
   './js/app.js',
   'https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap'
 ];

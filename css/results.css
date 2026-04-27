@@ -124,6 +124,30 @@
   line-height: 1;
 }
 
+/* ── Estimated warning ── */
+.estimated-warning {
+  background: rgba(184, 146, 42, 0.08);
+  border: 1px solid rgba(184, 146, 42, 0.25);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+  transition: background var(--transition);
+}
+
+.estimated-warning:hover {
+  background: rgba(184, 146, 42, 0.14);
+}
+
+.estimated-text {
+  font-size: 0.78rem;
+  color: var(--gold);
+  font-weight: 400;
+  line-height: 1.4;
+}
+
 /* ── Empty state ── */
 .empty-state {
   display: flex;

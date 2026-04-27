@@ -14,7 +14,8 @@ const Calculator = (() => {
    * @returns {number} Course handicap (rounded)
    */
   function courseHandicap(hi, cr, sr, par, holes) {
-    const hiAdjusted = holes === 9 ? hi / 2 : hi;
+    const is9 = holes === 'front9' || holes === 'back9';
+    const hiAdjusted = is9 ? hi / 2 : hi;
     return Math.round(hiAdjusted * (sr / 113) + (cr - par));
   }
 

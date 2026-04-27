@@ -37,9 +37,16 @@ const Storage = (() => {
     return val !== null ? parseFloat(val) : null;
   }
 
+  function deleteCourse(name) {
+    const courses = getCourses().filter(
+      c => c.name.toLowerCase() !== name.toLowerCase()
+    );
+    localStorage.setItem(STORAGE_KEYS.COURSES, JSON.stringify(courses));
+  }
+
   function saveHI(hi) {
     localStorage.setItem(STORAGE_KEYS.HI, String(hi));
   }
 
-  return { getCourses, saveCourse, searchCourses, getHI, saveHI };
+  return { getCourses, saveCourse, searchCourses, getHI, saveHI, deleteCourse };
 })();

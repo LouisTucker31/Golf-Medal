@@ -15,12 +15,40 @@ const UI = (() => {
   const modalBackdrop = document.getElementById('modalBackdrop');
   const searchDropdown = document.getElementById('searchDropdown');
 
-  function showResults(course, hi) {
-    const ch     = Calculator.courseHandicap(hi, course.cr, course.sr, course.par, course.holes);
-    const ranges = Calculator.scoreRanges(ch, course.par);
+  const estimatedWarning = document.getElementById('estimatedWarning');
+
+  function getStats(course) {
+    if (course.holes === 'front9') return course.statsFront || null;
+    if (course.holes === 'back9')  return course.statsBack  || null;
+    return course.stats18 || null;
+  }
+
+  function showResults(course, hi, onEstimatedTap) {
+    const stats = getStats(course);
+
+    // Fallback to legacy flat shape for any old saved courses
+    const par = stats?.par ?? course.par;
+    const cr  = stats?.cr  ?? course.cr;
+    const sr  = stats?.sr  ?? course.sr;
+    const estimated = stats?.estimated ?? false;
+
+    const ch     = Calculator.courseHandicap(hi, cr, sr, par, course.holes);
+    const ranges = Calculator.scoreRanges(ch, par);
+    const holeLabel = course.holes === 'front9' ? 'Front 9'
+                    : course.holes === 'back9'  ? 'Back 9'
+                    : `${course.holes} holes`;
 
     displayCourseName.textContent = course.name;
-    displayCourseMeta.textContent = `Par ${course.par} · CR ${course.cr} · SR ${course.sr} · ${course.holes} holes`;
+    displayCourseMeta.textContent = `Par ${par} · CR ${cr} · SR ${sr} · ${holeLabel}`;
+
+    // Estimated warning
+    if (estimated) {
+      estimatedWarning.classList.remove('hidden');
+      estimatedWarning.onclick = onEstimatedTap || null;
+    } else {
+      estimatedWarning.classList.add('hidden');
+      estimatedWarning.onclick = null;
+    }
     displayCourseHandicap.textContent = ch;
 
     goldRange.textContent   = `${ranges.gold.low}–${ranges.gold.high}`;
@@ -56,9 +84,13 @@ const UI = (() => {
       courses.forEach(course => {
         const item = document.createElement('div');
         item.className = 'search-dropdown-item';
+        const s = course.stats18 || course.statsFront || course.statsBack || {};
+        const par = s.par ?? course.par ?? '—';
+        const cr  = s.cr  ?? course.cr  ?? '—';
+        const sr  = s.sr  ?? course.sr  ?? '—';
         item.innerHTML = `
           <span class="item-name">${escapeHtml(course.name)}</span>
-          <span class="item-meta">Par ${course.par} · CR ${course.cr} · SR ${course.sr} · ${course.holes} holes</span>
+          <span class="item-meta">Par ${par} · CR ${cr} · SR ${sr} · 18 holes</span>
         `;
         item.addEventListener('click', () => {
           hideDropdown();
@@ -85,9 +117,19 @@ const UI = (() => {
     document.body.style.overflow = '';
   }
 
+  function showSearchSpinner() {
+    const icon = document.querySelector('.search-icon');
+    if (icon) icon.style.opacity = '0.3';
+  }
+
+  function hideSearchSpinner() {
+    const icon = document.querySelector('.search-icon');
+    if (icon) icon.style.opacity = '';
+  }
+
   function escapeHtml(str) {
     return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
-  return { showResults, hideResults, showDropdown, hideDropdown, openModal, closeModal, updateHIButton };
+  return { showResults, hideResults, showDropdown, hideDropdown, openModal, closeModal, updateHIButton, showSearchSpinner, hideSearchSpinner, getStats };
 })();

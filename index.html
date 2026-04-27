@@ -52,6 +52,10 @@
         <span class="course-meta" id="displayCourseMeta"></span>
       </div>
 
+      <div class="estimated-warning hidden" id="estimatedWarning">
+        <span class="estimated-text">⚠️ These stats are estimated — tap to enter real values.</span>
+      </div>
+
       <div class="handicap-display">
         <span class="handicap-label">Course Handicap</span>
         <span class="handicap-value" id="displayCourseHandicap">—</span>
@@ -112,8 +116,9 @@
           <div class="field-group">
             <label class="field-label" for="fieldHoles">Holes</label>
             <select class="field-input field-select" id="fieldHoles">
-              <option value="18">18</option>
-              <option value="9">9</option>
+              <option value="18">18 holes</option>
+              <option value="front9">Front 9</option>
+              <option value="back9">Back 9</option>
             </select>
           </div>
           <div class="field-group">
@@ -160,6 +165,7 @@
       });
     }
   </script>
+  <script src="js/api.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/calculator.js"></script>
   <script src="js/ui.js"></script>
@@ -168,3 +174,4 @@
 </body>
 </html>
 <link rel="stylesheet" href="css/responsive.css" />
+  <link rel="stylesheet" href="css/components.css" />
