@@ -151,6 +151,7 @@
 
     modalError.textContent = 'Please fill in all fields.';
     modalError.classList.add('hidden');
+    document.getElementById('estimatedNote').classList.add('hidden');
 
     if (!name || isNaN(par) || isNaN(cr) || isNaN(sr) || isNaN(hi)) {
       modalError.classList.remove('hidden');

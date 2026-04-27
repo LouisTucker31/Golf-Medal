@@ -17,12 +17,8 @@
 
 /* ── Estimated note in modal ── */
 .estimated-note {
-  font-size: 0.78rem;
+  font-size: 0.83rem;
   color: var(--gold);
   text-align: center;
   line-height: 1.5;
-  padding: 8px 12px;
-  background: rgba(184, 146, 42, 0.08);
-  border-radius: var(--radius-sm);
-  border: 1px solid rgba(184, 146, 42, 0.2);
 }
