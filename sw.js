@@ -1,4 +1,4 @@
-const STATIC_CACHE = 'medal-golf-static-v2';
+const STATIC_CACHE = 'medal-golf-static-v3';
 const API_CACHE    = 'medal-golf-api-v1';
 
 const STATIC_ASSETS = [
