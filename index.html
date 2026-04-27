@@ -3,181 +3,167 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Medal Golf</title>
+  <link rel="manifest" href="manifest.json" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="theme-color" content="#F7F9F8" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <title>Fairway</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Medal Golf" />
+  <link rel="apple-touch-icon" href="icons/icon-180.png" />
+  <meta name="theme-color" content="#f5f0e8" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/search.css" />
+  <link rel="stylesheet" href="css/results.css" />
+  <link rel="stylesheet" href="css/modal.css" />
 </head>
 <body>
 
-  <!-- Header -->
-  <header class="app-header">
-    <div class="header-inner">
-      <div class="app-logo">
-        <span class="logo-icon">⛳</span>
-        <span class="logo-text">Fairway</span>
-      </div>
-      <nav class="pill-nav" id="pillNav">
-        <button class="pill-btn active" data-page="scorecards">Scorecards</button>
-        <button class="pill-btn" data-page="stats">Stats</button>
-        <div class="pill-slider" id="pillSlider"></div>
-      </nav>
-    </div>
-  </header>
+  <!-- Main view -->
+  <div class="app">
 
-  <!-- Pages -->
-  <main class="app-main">
+    <header class="app-header">
+      <h1 class="app-title">Medal Golf</h1>
+      <p class="app-sub">Enter your course, see your medals.</p>
+    </header>
 
-    
-
-    <div class="pages-wrapper">
-    <!-- SCORECARDS PAGE -->
-    <section class="page active" id="page-scorecards">
-      <div class="page-content">
-
-        <div class="page-header-block">
-          <h2 class="page-title">Scorecards</h2>
-          <button class="icon-btn" id="newRoundBtnSC">
-            <span>+</span>
-          </button>
+    <section class="search-section">
+      <div class="search-row">
+        <div class="search-wrap">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="9" r="6"/><line x1="14.5" y1="14.5" x2="18" y2="18"/>
+          </svg>
+          <input type="text" id="searchInput" class="search-input" placeholder="Search a course…" autocomplete="off" />
+          <div id="searchDropdown" class="search-dropdown hidden"></div>
         </div>
-
-        <div class="filter-row">
-          <button class="filter-chip active" data-filter="all">All</button>
-          <button class="filter-chip" data-filter="18">18 Holes</button>
-          <button class="filter-chip" data-filter="9">9 Holes</button>
-        </div>
-
-        <div class="scorecards-list" id="scorecardsList">
-          <div class="empty-state">
-            <div class="empty-icon">📋</div>
-            <p>No scorecards yet.<br>Start a new round to begin.</p>
-          </div>
-        </div>
-
+        <button class="add-btn" id="openAddCourse" title="Add course">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <line x1="10" y1="4" x2="10" y2="16"/><line x1="4" y1="10" x2="16" y2="10"/>
+          </svg>
+        </button>
       </div>
     </section>
 
-    <!-- STATS PAGE -->
-    <section class="page" id="page-stats">
-      <div class="page-content">
+    <!-- Results -->
+    <section class="results-section hidden" id="resultsSection">
+      <div class="course-info">
+        <span class="course-name-label" id="displayCourseName"></span>
+        <span class="course-meta" id="displayCourseMeta"></span>
+      </div>
 
-        <div class="page-header-block">
-          <h2 class="page-title">Stats</h2>
-        </div>
+      <div class="handicap-display">
+        <span class="handicap-label">Course Handicap</span>
+        <span class="handicap-value" id="displayCourseHandicap">—</span>
+      </div>
 
-        <div class="stats-empty" id="statsEmpty">
-          <div class="empty-icon">📊</div>
-          <p>Play some rounds to<br>unlock your stats.</p>
-        </div>
-
-        <div class="stats-grid" id="statsGrid" style="display:none;">
-          <div class="stat-card">
-            <span class="stat-label">Avg Score</span>
-            <span class="stat-value" id="statAvgScore">—</span>
-            <span class="stat-sub">vs par</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-label">Best Round</span>
-            <span class="stat-value" id="statBestRound">—</span>
-            <span class="stat-sub">gross score</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-label">Rounds</span>
-            <span class="stat-value" id="statRoundsPlayed">0</span>
-            <span class="stat-sub">played</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-label">Handicap</span>
-            <span class="stat-value" id="statHandicap">—</span>
-            <span class="stat-sub">index</span>
+      <div class="medals">
+        <div class="medal-row" id="goldRow">
+          <span class="medal-emoji">🥇</span>
+          <div class="medal-info">
+            <span class="medal-tier">Gold</span>
+            <span class="medal-range" id="goldRange">—</span>
           </div>
         </div>
-
-        <div class="section-title" id="statsSectionTitle" style="display:none; margin-top:24px;">Score Trend</div>
-        <div class="trend-chart" id="trendChart" style="display:none;"></div>
-
+        <div class="medal-row" id="silverRow">
+          <span class="medal-emoji">🥈</span>
+          <div class="medal-info">
+            <span class="medal-tier">Silver</span>
+            <span class="medal-range" id="silverRange">—</span>
+          </div>
+        </div>
+        <div class="medal-row" id="bronzeRow">
+          <span class="medal-emoji">🥉</span>
+          <div class="medal-info">
+            <span class="medal-tier">Bronze</span>
+            <span class="medal-range" id="bronzeRange">—</span>
+          </div>
+        </div>
       </div>
     </section>
 
-  </div><!-- /pages-wrapper -->
-  </main>
+    <!-- Empty state -->
+    <section class="empty-state" id="emptyState">
+      <span class="empty-icon">⛳</span>
+      <p class="empty-text">Search for a course or tap + to add one.</p>
+    </section>
 
-  <!-- NEW ROUND MODAL -->
-  <div class="modal-overlay" id="newRoundModal">
-    <div class="modal-sheet">
-      <div class="modal-handle"></div>
-      <h3 class="modal-title">New Round</h3>
+  </div>
 
-      <div class="form-group">
-        <label class="form-label">Course Name</label>
-        <input class="form-input" type="text" id="courseName" placeholder="e.g. St Andrews Old Course" />
+  <!-- Add Course Modal -->
+  <div class="modal-backdrop hidden" id="modalBackdrop">
+    <div class="modal" id="addCourseModal">
+      <div class="modal-header">
+        <h2 class="modal-title">Add Course</h2>
+        <button class="modal-close" id="closeModal">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <line x1="5" y1="5" x2="15" y2="15"/><line x1="15" y1="5" x2="5" y2="15"/>
+          </svg>
+        </button>
       </div>
 
-      <div class="form-row">
-        <div class="form-group half">
-          <label class="form-label">Date</label>
-          <input class="form-input" type="date" id="roundDate" />
+      <div class="modal-body">
+        <div class="field-group">
+          <label class="field-label" for="fieldName">Course Name</label>
+          <input class="field-input" type="text" id="fieldName" placeholder="e.g. St Andrews Links" />
         </div>
-        <div class="form-group half">
-          <label class="form-label">Holes</label>
-          <select class="form-input" id="roundHoles">
-            <option value="18">18 Holes</option>
-            <option value="9">9 Holes</option>
-          </select>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label" for="fieldHoles">Holes</label>
+            <select class="field-input field-select" id="fieldHoles">
+              <option value="18">18</option>
+              <option value="9">9</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="fieldPar">Par</label>
+            <input class="field-input" type="number" id="fieldPar" placeholder="72" min="27" max="74" />
+          </div>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label class="form-label">Course Par</label>
-        <input class="form-input" type="number" id="coursePar" placeholder="72" min="27" max="75" />
-      </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label" for="fieldCR">Course Rating</label>
+            <input class="field-input" type="number" id="fieldCR" placeholder="71.2" step="0.1" min="55" max="80" />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="fieldSR">Slope Rating</label>
+            <input class="field-input" type="number" id="fieldSR" placeholder="130" min="55" max="155" />
+          </div>
+        </div>
 
-      <div class="modal-actions">
-        <button class="btn-secondary" id="cancelRoundBtn">Cancel</button>
-        <button class="btn-primary" id="createRoundBtn">Create Scorecard</button>
+        <div class="field-divider"></div>
+
+        <div class="field-group">
+          <label class="field-label" for="fieldHI">My Handicap Index</label>
+          <input class="field-input" type="number" id="fieldHI" placeholder="14.2" step="0.1" min="0" max="54" />
+          <span class="field-hint">This is saved and used for all courses.</span>
+        </div>
+
+        <p class="modal-error hidden" id="modalError">Please fill in all fields.</p>
+
+        <button class="submit-btn" id="submitCourse">Save &amp; Calculate</button>
       </div>
     </div>
   </div>
 
-  <!-- SCORECARD DETAIL MODAL -->
-  <div class="modal-overlay" id="scorecardModal">
-    <div class="modal-sheet scorecard-sheet">
-      <div class="modal-handle"></div>
-      <div class="sc-modal-header">
-        <div>
-          <h3 class="modal-title" id="scModalCourse">Course Name</h3>
-          <p class="sc-modal-date" id="scModalDate">Date</p>
-        </div>
-        <button class="close-btn" id="closeSCModal">✕</button>
-      </div>
+  <!-- Edit Handicap floating button -->
+  <button class="hi-edit-btn hidden" id="hiEditBtn" title="Edit handicap index">
+    HI <span id="hiEditValue"></span>
+  </button>
 
-      <div class="sc-totals-row">
-        <div class="sc-total-chip">
-          <span class="sc-total-label">Score</span>
-          <span class="sc-total-val" id="scTotalScore">0</span>
-        </div>
-        <div class="sc-total-chip">
-          <span class="sc-total-label">Par</span>
-          <span class="sc-total-val" id="scTotalPar">—</span>
-        </div>
-        <div class="sc-total-chip">
-          <span class="sc-total-label">+/−</span>
-          <span class="sc-total-val" id="scTotalDiff">—</span>
-        </div>
-      </div>
-
-      <div class="hole-grid" id="holeGrid"></div>
-
-      <div class="modal-actions">
-        <button class="btn-danger" id="deleteRoundBtn">Delete Round</button>
-        <button class="btn-primary" id="saveRoundBtn">Save</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js');
+      });
+    }
+  </script>
+  <script src="js/storage.js"></script>
+  <script src="js/calculator.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
+<link rel="stylesheet" href="css/responsive.css" />

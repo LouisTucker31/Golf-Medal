@@ -1,0 +1,150 @@
+/* ── Results section ── */
+.results-section {
+  animation: fadeUp 0.3s ease both;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 55vh;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Course info ── */
+.course-info {
+  text-align: center;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.course-name-label {
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.course-meta {
+  font-size: 0.82rem;
+  color: var(--text-tertiary);
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+/* ── Course handicap display ── */
+.handicap-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 32px;
+  gap: 6px;
+  width: 100%;
+}
+
+.handicap-label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+
+.handicap-value {
+  font-family: var(--font-display);
+  font-size: 4rem;
+  color: var(--text-primary);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+/* ── Medals ── */
+.medals {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  padding-left: 36px;
+}
+
+.medal-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.medal-row:first-child {
+  border-top: 1px solid var(--border-light);
+}
+
+.medal-emoji {
+  font-size: 2rem;
+  line-height: 1;
+  flex-shrink: 0;
+  width: 32px;
+  text-align: center;
+}
+
+.medal-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 120px;
+}
+
+.medal-tier {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 500;
+  color: var(--text-tertiary);
+}
+
+#goldRow .medal-tier   { color: var(--gold); }
+#silverRow .medal-tier { color: var(--silver); }
+#bronzeRow .medal-tier { color: var(--bronze); }
+
+.medal-range {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+/* ── Empty state ── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 55vh;
+  gap: 14px;
+  color: var(--text-tertiary);
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 2.8rem;
+  line-height: 1;
+  opacity: 0.5;
+}
+
+.empty-text {
+  font-size: 0.88rem;
+  font-weight: 300;
+  line-height: 1.6;
+  max-width: 200px;
+}

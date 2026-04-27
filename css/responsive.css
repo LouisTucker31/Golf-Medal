@@ -1,0 +1,52 @@
+/* ── Responsive & accessibility ── */
+
+/* Small devices (iPhone SE: 375px and below) */
+@media (max-width: 375px) {
+  .app-title {
+    font-size: 2.1rem;
+  }
+  .handicap-value {
+    font-size: 3.2rem;
+  }
+  .medal-range {
+    font-size: 1.25rem;
+  }
+  .course-name-label {
+    font-size: 1.3rem;
+  }
+}
+
+/* Landscape on mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+  .app-header {
+    padding: 24px 0 20px;
+  }
+  .results-section,
+  .empty-state {
+    min-height: unset;
+  }
+  .handicap-value {
+    font-size: 2.8rem;
+  }
+  .handicap-display {
+    margin-bottom: 20px;
+  }
+  .medal-row {
+    padding: 14px 0;
+  }
+}
+
+/* Tablet / desktop — cap and centre */
+@media (min-width: 540px) {
+  .app {
+    padding-left: max(32px, env(safe-area-inset-left));
+    padding-right: max(32px, env(safe-area-inset-right));
+  }
+  .modal {
+    border-radius: var(--radius-lg);
+    margin-bottom: 40px;
+  }
+  .modal-backdrop {
+    align-items: center;
+  }
+}
