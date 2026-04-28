@@ -101,8 +101,28 @@ const StatsCalc = (() => {
   function getHoleStats(rounds, handicap) {
     const isSubTen = handicap !== null && handicap < 10;
 
-    const goodHoles = rounds.reduce((acc, r) => {
-      if (r.eagleOrBetter === null) return acc;
+    // Only use rounds that have breakdown data
+    const withBreakdown = rounds.filter(r =>
+      r.eagleOrBetter !== null &&
+      r.birdies !== null &&
+      r.pars !== null &&
+      r.bogeys !== null &&
+      r.doubles !== null &&
+      r.tripleOrWorse !== null
+    );
+
+    if (!withBreakdown.length) {
+      return {
+        isSubTen,
+        goodPct:   null,
+        badPct:    null,
+        goodLabel: isSubTen ? 'Par or Better' : 'Bogey or Better',
+        badLabel:  isSubTen ? 'Bogey or Worse' : 'Double or Worse',
+        trend:     { good: 'dash', bad: 'dash' }
+      };
+    }
+
+    const goodHoles = withBreakdown.reduce((acc, r) => {
       const good = isSubTen
         ? (r.eagleOrBetter + r.birdies + r.pars)
         : (r.eagleOrBetter + r.birdies + r.pars + r.bogeys);
@@ -111,8 +131,7 @@ const StatsCalc = (() => {
       return acc;
     }, { hit: 0, total: 0 });
 
-    const badHoles = rounds.reduce((acc, r) => {
-      if (r.eagleOrBetter === null) return acc;
+    const badHoles = withBreakdown.reduce((acc, r) => {
       const bad = isSubTen
         ? (r.bogeys + r.doubles + r.tripleOrWorse)
         : (r.doubles + r.tripleOrWorse);
@@ -123,13 +142,13 @@ const StatsCalc = (() => {
 
     return {
       isSubTen,
-      goodPct: goodHoles.total ? Math.round((goodHoles.hit / goodHoles.total) * 100) : null,
-      badPct:  badHoles.total  ? Math.round((badHoles.hit  / badHoles.total)  * 100) : null,
+      goodPct:   goodHoles.total ? Math.round((goodHoles.hit / goodHoles.total) * 100) : null,
+      badPct:    badHoles.total  ? Math.round((badHoles.hit  / badHoles.total)  * 100) : null,
       goodLabel: isSubTen ? 'Par or Better' : 'Bogey or Better',
       badLabel:  isSubTen ? 'Bogey or Worse' : 'Double or Worse',
       trend: {
-        good: trend(rounds.filter(r => r.eagleOrBetter !== null), isSubTen ? 'pars' : 'bogeys'),
-        bad:  trend(rounds.filter(r => r.eagleOrBetter !== null), 'doubles', true),
+        good: trend(withBreakdown, isSubTen ? 'pars' : 'bogeys'),
+        bad:  trend(withBreakdown, 'doubles', true),
       }
     };
   }

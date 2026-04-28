@@ -50,11 +50,15 @@ const StatsUI = (() => {
         { key: 'gir',        label: 'GIR' },
         { key: 'fairways',   label: 'FWY' },
         { key: 'scrambling', label: 'SCR' },
-        { key: 'goodHoles',  label: holeStats?.isSubTen ? 'Par+' : 'Bog+' },
       ];
+      if (holeStats?.goodPct !== null) {
+        chartItems.push({ key: 'goodHoles', label: holeStats.isSubTen ? 'Par+' : 'Bog+' });
+      }
       const chartBand = {
         ...bandAvg,
-        goodHoles: holeStats?.isSubTen ? bandAvg.girPlusPct : bandAvg.bogeyPlusPct,
+        goodHoles: holeStats?.goodPct !== null
+          ? (holeStats.isSubTen ? bandAvg.girPlusPct : bandAvg.bogeyPlusPct)
+          : null,
       };
       StatsCharts.render(containerId, chartStats, chartBand, chartItems);
     }
