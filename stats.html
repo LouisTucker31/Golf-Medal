@@ -132,6 +132,12 @@
 
     </section>
 
+    <!-- Round History -->
+    <section class="stats-section">
+      <h2 class="stats-section-title">Round History</h2>
+      <div id="roundHistoryList"></div>
+    </section>
+
   </div>
 
   <!-- Add Round floating button -->
@@ -318,16 +324,18 @@
   </div>
 
   <script src="js/api.js"></script>
+  <script src="js/storage.js"></script>
   <script src="js/stats-data.js"></script>
   <script src="js/stats-calc.js"></script>
   <script src="js/stats-charts.js"></script>
   <script src="js/stats-ui.js"></script>
-  <script src="js/stats-ui.js"></script>
   <script src="js/stats-app.js"></script>
   <script src="js/stats-search.js"></script>
   <script src="js/stats-input.js"></script>
+  <script src="js/stats-history.js"></script>
   <script>
     StatsInput.init();
+    StatsHistory.render();
   </script>
 
 </body>

@@ -10,8 +10,43 @@ const StatsInput = (() => {
 
   function open() {
     reset();
+    StatsHistory?.clearEditingId();
     el('statsModalBackdrop').classList.remove('hidden');
     document.body.style.overflow = 'hidden';
+    showStep(1);
+  }
+
+  function openForEdit(round) {
+    reset();
+    el('statsModalBackdrop').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+
+    // Prefill Step 1
+    if (el('roundCourseInput')) el('roundCourseInput').value = round.course || '';
+    if (el('roundDate'))        el('roundDate').value        = round.date?.split('T')[0] || todayISO();
+    if (el('roundHoles'))       el('roundHoles').value       = round.holes || '18';
+    if (el('roundGross'))       el('roundGross').value       = round.gross || '';
+
+    // Prefill Step 2
+    if (el('roundEagle'))          el('roundEagle').value          = round.eagleOrBetter ?? '';
+    if (el('roundBirdie'))         el('roundBirdie').value         = round.birdies       ?? '';
+    if (el('roundPar'))            el('roundPar').value            = round.pars          ?? '';
+    if (el('roundBogey'))          el('roundBogey').value          = round.bogeys        ?? '';
+    if (el('roundDouble'))         el('roundDouble').value         = round.doubles       ?? '';
+    if (el('roundTriple'))         el('roundTriple').value         = round.tripleOrWorse ?? '';
+    if (el('roundGIR'))            el('roundGIR').value            = round.girHit        ?? '';
+    if (el('roundPutts'))          el('roundPutts').value          = round.putts         ?? '';
+    if (el('roundFairwaysHit'))    el('roundFairwaysHit').value    = round.fairwaysHit   ?? '';
+    if (el('roundFairwaysTotal'))  el('roundFairwaysTotal').value  = round.fairwaysTotal ?? '';
+    if (el('roundScramblingHit'))  el('roundScramblingHit').value  = round.scramblingHit  ?? '';
+    if (el('roundScramblingTotal'))el('roundScramblingTotal').value = round.scramblingTotal ?? '';
+    if (el('roundSandsaveHit'))    el('roundSandsaveHit').value    = round.sandsaveHit   ?? '';
+    if (el('roundSandsaveTotal'))  el('roundSandsaveTotal').value  = round.sandsaveTotal ?? '';
+    if (el('roundPenalties'))      el('roundPenalties').value      = round.penalties     ?? '';
+    if (el('roundBunkers'))        el('roundBunkers').value        = round.bunkers       ?? '';
+    if (el('roundRecoveries'))     el('roundRecoveries').value     = round.recoveries    ?? '';
+
+    el('statsModalTitle').textContent = 'Edit Round';
     showStep(1);
   }
 
@@ -231,6 +266,27 @@ const StatsInput = (() => {
     if (el('statsModalError')) el('statsModalError').textContent = msg;
   }
 
+  function saveRound(round) {
+    const editingId = StatsHistory?.getEditingId();
+    if (editingId) {
+      // Update existing round
+      const rounds = StatsData.getRounds();
+      const idx    = rounds.findIndex(r => r.id === editingId);
+      if (idx !== -1) {
+        round.id   = editingId;
+        round.date = rounds[idx].date;
+        rounds[idx] = round;
+        StatsData.saveRounds(rounds);
+      }
+      StatsHistory.clearEditingId();
+    } else {
+      StatsData.addRound(round);
+    }
+    close();
+    StatsApp.refresh();
+    StatsHistory.render();
+  }
+
   function is9Holes(holes) {
     return holes === 'front9' || holes === 'back9';
   }
@@ -284,17 +340,13 @@ const StatsInput = (() => {
     // Step 2 Save
     el('statsStep2Save')?.addEventListener('click', () => {
       const round = buildRound(false);
-      StatsData.addRound(round);
-      close();
-      if (typeof StatsApp !== 'undefined') StatsApp.refresh();
+      saveRound(round);
     });
 
     // Step 2 Skip
     el('statsStep2Skip')?.addEventListener('click', () => {
       const round = buildRound(true);
-      StatsData.addRound(round);
-      close();
-      if (typeof StatsApp !== 'undefined') StatsApp.refresh();
+      saveRound(round);
     });
   }
 

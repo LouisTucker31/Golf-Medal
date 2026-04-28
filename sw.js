@@ -30,6 +30,7 @@ const STATIC_ASSETS = [
   './js/stats-app.js',
   './js/stats-search.js',
   './js/stats-input.js',
+  './js/stats-history.js',
   './css/stats.css',
   './css/stats-input.css',
   './css/launcher.css',
