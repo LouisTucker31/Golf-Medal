@@ -2,9 +2,8 @@
 const StatsUI = (() => {
 
   function trendIcon(direction) {
-    if (direction === 'up')     return '<span class="trend trend--up">▲</span>';
-    if (direction === 'down')   return '<span class="trend trend--down">▼</span>';
-    if (direction === 'steady') return '<span class="trend trend--steady">●</span>';
+    if (direction === 'up')   return '<span class="trend trend--up">▲</span>';
+    if (direction === 'down') return '<span class="trend trend--down">▼</span>';
     return '';
   }
 

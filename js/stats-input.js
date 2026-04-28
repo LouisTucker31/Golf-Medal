@@ -148,11 +148,15 @@ const StatsInput = (() => {
     if (isNaN(gross) || gross < 50 || gross > 200) {
       showError('Please enter a valid gross score.'); return false;
     }
+
+    // Skip course validation when editing an existing round
+    if (StatsHistory?.getEditingId()) return true;
+
     // Warn if no tee selected and no manual CR/SR entered
-    const manualFields = el('manualCourseFields');
+    const manualFields  = el('manualCourseFields');
     const manualVisible = manualFields && !manualFields.classList.contains('hidden');
-    const manualCR = parseFloat(el('manualCR')?.value);
-    const manualSR = parseFloat(el('manualSR')?.value);
+    const manualCR      = parseFloat(el('manualCR')?.value);
+    const manualSR      = parseFloat(el('manualSR')?.value);
     if (!selectedTee && !manualVisible) {
       showError('Please select a course from the dropdown so CR/SR can be pulled through for your handicap.'); return false;
     }

@@ -121,14 +121,14 @@ const StatsCharts = (() => {
       svg.appendChild(bandBar);
 
       // Tooltip events — user bar
-      const userTip = `You: ${userVal}% · Avg: ${bandVal}%`;
+      const userTip = `You: ${userVal}%`;
       userBar.addEventListener('mouseenter', e => showTooltip(e, userTip));
       userBar.addEventListener('mouseleave', hideTooltip);
       userBar.addEventListener('touchstart', e => { e.preventDefault(); showTooltip(e, userTip); }, { passive: false });
       userBar.addEventListener('touchend', hideTooltip);
 
       // Tooltip events — band bar
-      const bandTip = `Avg: ${bandVal}% · You: ${userVal}%`;
+      const bandTip = `Avg: ${bandVal}%`;
       bandBar.addEventListener('mouseenter', e => showTooltip(e, bandTip));
       bandBar.addEventListener('mouseleave', hideTooltip);
       bandBar.addEventListener('touchstart', e => { e.preventDefault(); showTooltip(e, bandTip); }, { passive: false });
@@ -146,7 +146,7 @@ const StatsCharts = (() => {
     });
 
     // Legend
-    const legendY = height - 10;
+    const legendY = height - 2;
     const legendX = width - 100;
 
     const r1 = document.createElementNS(svgNS, 'rect');
