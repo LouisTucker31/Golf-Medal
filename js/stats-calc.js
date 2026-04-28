@@ -4,12 +4,12 @@ const StatsCalc = (() => {
   // ── Handicap band averages ──
   // Sources: Shot Scope, Game Golf, typical amateur averages
   const BAND_AVERAGES = {
-    '0-5':   { gir: 72, fairways: 62, putts: 29, scrambling: 58, updown: 52, sandsave: 48, penalties: 0.4, recoveries: 1.2, bunkers: 1.5 },
-    '5-10':  { gir: 58, fairways: 55, putts: 31, scrambling: 45, updown: 40, sandsave: 35, penalties: 0.7, recoveries: 1.8, bunkers: 2.0 },
-    '10-15': { gir: 42, fairways: 48, putts: 33, scrambling: 35, updown: 30, sandsave: 25, penalties: 1.0, recoveries: 2.2, bunkers: 2.3 },
-    '15-20': { gir: 28, fairways: 40, putts: 34, scrambling: 25, updown: 22, sandsave: 18, penalties: 1.4, recoveries: 2.6, bunkers: 2.5 },
-    '20-25': { gir: 18, fairways: 33, putts: 35, scrambling: 18, updown: 16, sandsave: 12, penalties: 1.8, recoveries: 3.0, bunkers: 2.8 },
-    '25-28': { gir: 10, fairways: 26, putts: 36, scrambling: 12, updown: 10, sandsave: 8,  penalties: 2.2, recoveries: 3.4, bunkers: 3.0 },
+    '0-5':   { gir: 72, fairways: 62, putts: 29, scrambling: 58, updown: 52, sandsave: 48, penalties: 0.4, recoveries: 1.2, bunkers: 1.5, girPlusPct: 65, bogeyPlusPct: 88 },
+    '5-10':  { gir: 58, fairways: 55, putts: 31, scrambling: 45, updown: 40, sandsave: 35, penalties: 0.7, recoveries: 1.8, bunkers: 2.0, girPlusPct: 52, bogeyPlusPct: 78 },
+    '10-15': { gir: 42, fairways: 48, putts: 33, scrambling: 35, updown: 30, sandsave: 25, penalties: 1.0, recoveries: 2.2, bunkers: 2.3, girPlusPct: 38, bogeyPlusPct: 68 },
+    '15-20': { gir: 28, fairways: 40, putts: 34, scrambling: 25, updown: 22, sandsave: 18, penalties: 1.4, recoveries: 2.6, bunkers: 2.5, girPlusPct: 25, bogeyPlusPct: 58 },
+    '20-25': { gir: 18, fairways: 33, putts: 35, scrambling: 18, updown: 16, sandsave: 12, penalties: 1.8, recoveries: 3.0, bunkers: 2.8, girPlusPct: 16, bogeyPlusPct: 48 },
+    '25-28': { gir: 10, fairways: 26, putts: 36, scrambling: 12, updown: 10, sandsave: 8,  penalties: 2.2, recoveries: 3.4, bunkers: 3.0, girPlusPct: 10, bogeyPlusPct: 38 },
   };
 
   function getBand(handicap) {
@@ -97,6 +97,43 @@ const StatsCalc = (() => {
     };
   }
 
+  // ── Hole score stats ──
+  function getHoleStats(rounds, handicap) {
+    const isSubTen = handicap !== null && handicap < 10;
+
+    const goodHoles = rounds.reduce((acc, r) => {
+      if (r.eagleOrBetter === null) return acc;
+      const good = isSubTen
+        ? (r.eagleOrBetter + r.birdies + r.pars)
+        : (r.eagleOrBetter + r.birdies + r.pars + r.bogeys);
+      acc.hit   += good;
+      acc.total += 18;
+      return acc;
+    }, { hit: 0, total: 0 });
+
+    const badHoles = rounds.reduce((acc, r) => {
+      if (r.eagleOrBetter === null) return acc;
+      const bad = isSubTen
+        ? (r.bogeys + r.doubles + r.tripleOrWorse)
+        : (r.doubles + r.tripleOrWorse);
+      acc.hit   += bad;
+      acc.total += 18;
+      return acc;
+    }, { hit: 0, total: 0 });
+
+    return {
+      isSubTen,
+      goodPct: goodHoles.total ? Math.round((goodHoles.hit / goodHoles.total) * 100) : null,
+      badPct:  badHoles.total  ? Math.round((badHoles.hit  / badHoles.total)  * 100) : null,
+      goodLabel: isSubTen ? 'Par or Better' : 'Bogey or Better',
+      badLabel:  isSubTen ? 'Bogey or Worse' : 'Double or Worse',
+      trend: {
+        good: trend(rounds.filter(r => r.eagleOrBetter !== null), isSubTen ? 'pars' : 'bogeys'),
+        bad:  trend(rounds.filter(r => r.eagleOrBetter !== null), 'doubles', true),
+      }
+    };
+  }
+
   // ── Recovery stats ──
   function getRecoveryStats(rounds) {
     return {
@@ -115,7 +152,7 @@ const StatsCalc = (() => {
 
   return {
     getBand, getBandAverages,
-    getOverview, getShotStats, getRecoveryStats,
+    getOverview, getShotStats, getRecoveryStats, getHoleStats,
     avg, pct, trend
   };
 })();

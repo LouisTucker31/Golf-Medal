@@ -13,32 +13,50 @@ const StatsUI = (() => {
     return val !== null && val !== undefined ? `${val}${suffix}` : '—';
   }
 
-  function renderOverview(overview, handicap) {
+  function renderOverview(overview, handicap, holeStats) {
     document.getElementById('statHandicap').textContent  = handicap !== null ? handicap : '—';
     document.getElementById('statRounds').textContent    = overview?.count   ?? '—';
     document.getElementById('statAvgGross').textContent  = fmt(overview?.avgGross);
     document.getElementById('statAvgOver').textContent   = fmt(overview?.avgOverPar);
     document.getElementById('statBest').textContent      = fmt(overview?.best);
     document.getElementById('statWorst').textContent     = fmt(overview?.worst);
+
+    if (holeStats) {
+      const goodLabel = document.getElementById('statGoodHolesLabel');
+      const badLabel  = document.getElementById('statBadHolesLabel');
+      const goodVal   = document.getElementById('statGoodHoles');
+      const badVal    = document.getElementById('statBadHoles');
+      if (goodLabel) goodLabel.textContent = holeStats.goodLabel;
+      if (badLabel)  badLabel.textContent  = holeStats.badLabel;
+      if (goodVal)   goodVal.innerHTML     = holeStats.goodPct !== null ? `${holeStats.goodPct}% ${trendIcon(holeStats.trend.good)}` : '—';
+      if (badVal)    badVal.innerHTML      = holeStats.badPct  !== null ? `${holeStats.badPct}%  ${trendIcon(holeStats.trend.bad)}`  : '—';
+    }
   }
 
-  function renderShots(shots, bandAvg, containerId) {
+  function renderShots(shots, bandAvg, containerId, holeStats) {
     document.getElementById('statGIR').innerHTML        = shots ? `${fmt(shots.gir, '%')} ${trendIcon(shots.trends?.gir)}` : '—';
     document.getElementById('statFairways').innerHTML   = shots ? `${fmt(shots.fairways, '%')} ${trendIcon(shots.trends?.fairways)}` : '—';
     document.getElementById('statPutts').innerHTML      = shots ? `${fmt(shots.putts)} ${trendIcon(shots.trends?.putts)}` : '—';
     document.getElementById('statScrambling').innerHTML = shots ? `${fmt(shots.scrambling, '%')} ${trendIcon(shots.trends?.scrambling)}` : '—';
 
     if (shots && bandAvg) {
-      StatsCharts.render(containerId, {
+      const chartStats = {
         gir:        shots.gir,
         fairways:   shots.fairways,
-        putts:      shots.putts,
         scrambling: shots.scrambling,
-      }, bandAvg, [
+        goodHoles:  holeStats?.goodPct ?? null,
+      };
+      const chartItems = [
         { key: 'gir',        label: 'GIR' },
         { key: 'fairways',   label: 'FWY' },
         { key: 'scrambling', label: 'SCR' },
-      ]);
+        { key: 'goodHoles',  label: holeStats?.isSubTen ? 'Par+' : 'Bog+' },
+      ];
+      const chartBand = {
+        ...bandAvg,
+        goodHoles: holeStats?.isSubTen ? bandAvg.girPlusPct : bandAvg.bogeyPlusPct,
+      };
+      StatsCharts.render(containerId, chartStats, chartBand, chartItems);
     }
   }
 

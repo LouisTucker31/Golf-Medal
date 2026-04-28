@@ -56,6 +56,14 @@
           <span class="stat-value" id="statAvgOver">—</span>
         </div>
         <div class="stat-card">
+          <span class="stat-label" id="statGoodHolesLabel">Bogey or Better</span>
+          <span class="stat-value" id="statGoodHoles">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label" id="statBadHolesLabel">Double or Worse</span>
+          <span class="stat-value" id="statBadHoles">—</span>
+        </div>
+        <div class="stat-card">
           <span class="stat-label">Best Round</span>
           <span class="stat-value stat-value--gold" id="statBest">—</span>
         </div>
@@ -214,6 +222,37 @@
 
       <!-- Step 2 — Shot Stats -->
       <div id="statsStep2" class="hidden">
+
+        <div class="field-group">
+          <label class="field-label">Score Breakdown</label>
+          <div class="score-breakdown-row">
+            <div class="score-breakdown-item">
+              <span class="score-breakdown-label">Eagle+</span>
+              <input class="field-input score-breakdown-input" type="number" id="roundEagle" placeholder="0" min="0" max="18" />
+            </div>
+            <div class="score-breakdown-item">
+              <span class="score-breakdown-label">Birdie</span>
+              <input class="field-input score-breakdown-input" type="number" id="roundBirdie" placeholder="0" min="0" max="18" />
+            </div>
+            <div class="score-breakdown-item">
+              <span class="score-breakdown-label">Par</span>
+              <input class="field-input score-breakdown-input" type="number" id="roundPar" placeholder="0" min="0" max="18" />
+            </div>
+            <div class="score-breakdown-item">
+              <span class="score-breakdown-label">Bogey</span>
+              <input class="field-input score-breakdown-input" type="number" id="roundBogey" placeholder="0" min="0" max="18" />
+            </div>
+            <div class="score-breakdown-item">
+              <span class="score-breakdown-label">Double</span>
+              <input class="field-input score-breakdown-input" type="number" id="roundDouble" placeholder="0" min="0" max="18" />
+            </div>
+            <div class="score-breakdown-item">
+              <span class="score-breakdown-label">Triple+</span>
+              <input class="field-input score-breakdown-input" type="number" id="roundTriple" placeholder="0" min="0" max="18" />
+            </div>
+          </div>
+          <span class="score-breakdown-total" id="scoreBreakdownTotal">0 / 18</span>
+        </div>
 
         <div class="field-row">
           <div class="field-group">

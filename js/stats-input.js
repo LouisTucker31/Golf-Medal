@@ -42,8 +42,14 @@ const StatsInput = (() => {
     ['roundGIR', 'roundFairwaysHit', 'roundFairwaysTotal',
      'roundPutts', 'roundScramblingHit', 'roundScramblingTotal',
      'roundSandsaveHit', 'roundSandsaveTotal',
-     'roundPenalties', 'roundBunkers', 'roundRecoveries'
+     'roundPenalties', 'roundBunkers', 'roundRecoveries',
+     'roundEagle', 'roundBirdie', 'roundPar',
+     'roundBogey', 'roundDouble', 'roundTriple'
     ].forEach(id => { if (el(id)) el(id).value = ''; });
+    if (el('scoreBreakdownTotal')) {
+      el('scoreBreakdownTotal').textContent = '0 / 18';
+      el('scoreBreakdownTotal').classList.remove('complete');
+    }
 
     if (el('statsModalError')) el('statsModalError').textContent = '';
   }
@@ -166,6 +172,18 @@ const StatsInput = (() => {
     // Shot stats — double if 9 holes
     const mult = is9 ? 2 : 1;
 
+    const mult = is9 ? 2 : 1;
+    const totalHoles = is9 ? 9 : 18;
+
+    const eagleOrBetter  = skipStats ? null : (parseInt(el('roundEagle')?.value)  || 0);
+    const birdies        = skipStats ? null : (parseInt(el('roundBirdie')?.value) || 0);
+    const pars           = skipStats ? null : (parseInt(el('roundPar')?.value)    || 0);
+    const bogeys         = skipStats ? null : (parseInt(el('roundBogey')?.value)  || 0);
+    const doubles        = skipStats ? null : (parseInt(el('roundDouble')?.value) || 0);
+    const tripleOrWorse  = skipStats ? null : (parseInt(el('roundTriple')?.value) || 0);
+
+    const hasBreakdown = !skipStats && (eagleOrBetter + birdies + pars + bogeys + doubles + tripleOrWorse) > 0;
+
     const gir              = skipStats ? null : parseInt(el('roundGIR')?.value)              || null;
     const fairwaysHit      = skipStats ? null : parseInt(el('roundFairwaysHit')?.value)      || null;
     const fairwaysTotal    = skipStats ? null : parseInt(el('roundFairwaysTotal')?.value)     || null;
@@ -200,11 +218,21 @@ const StatsInput = (() => {
       penalties:        penalties !== null ? penalties * mult : null,
       bunkers:          bunkers !== null ? bunkers * mult : null,
       recoveries:       recoveries !== null ? recoveries * mult : null,
+      eagleOrBetter:    hasBreakdown ? eagleOrBetter * mult : null,
+      birdies:          hasBreakdown ? birdies       * mult : null,
+      pars:             hasBreakdown ? pars          * mult : null,
+      bogeys:           hasBreakdown ? bogeys        * mult : null,
+      doubles:          hasBreakdown ? doubles       * mult : null,
+      tripleOrWorse:    hasBreakdown ? tripleOrWorse * mult : null,
     };
   }
 
   function showError(msg) {
     if (el('statsModalError')) el('statsModalError').textContent = msg;
+  }
+
+  function is9Holes(holes) {
+    return holes === 'front9' || holes === 'back9';
   }
 
   function init() {
@@ -231,6 +259,21 @@ const StatsInput = (() => {
 
     // Course search
     StatsSearch.init('roundCourseInput', 'roundCourseDropdown', onCourseSelected);
+
+    // Score breakdown total counter
+    const breakdownIds = ['roundEagle','roundBirdie','roundPar','roundBogey','roundDouble','roundTriple'];
+    breakdownIds.forEach(id => {
+      el(id)?.addEventListener('input', () => {
+        const holes   = el('roundHoles')?.value;
+        const total   = is9Holes(holes) ? 9 : 18;
+        const sum     = breakdownIds.reduce((acc, bid) => acc + (parseInt(el(bid)?.value) || 0), 0);
+        const label   = el('scoreBreakdownTotal');
+        if (label) {
+          label.textContent = `${sum} / ${total}`;
+          label.classList.toggle('complete', sum === total);
+        }
+      });
+    });
 
     // Step 1 Next
     el('statsStep1Next')?.addEventListener('click', () => {
