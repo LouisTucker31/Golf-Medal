@@ -229,7 +229,7 @@
 .add-round-btn {
   position: fixed;
   bottom: max(32px, calc(env(safe-area-inset-bottom) + 20px));
-  left: max(24px, calc(env(safe-area-inset-left) + 8px));
+  right: max(24px, calc(env(safe-area-inset-right) + 8px));
   background: var(--surface);
   border: 1.5px solid var(--border);
   border-radius: 100px;
@@ -263,6 +263,31 @@
 .add-round-btn:hover {
   background: var(--bg);
   border-color: var(--accent);
+}
+
+/* ── Field spacing ── */
+#statsStep1 .field-group,
+#statsStep2 .field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+#statsStep1 .field-row,
+#statsStep2 .field-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+#statsStep1 .field-row .field-group,
+#statsStep2 .field-row .field-group {
+  margin-bottom: 0;
+}
+
+.field-input {
+  text-align: left;
 }
 
 /* ── Error ── */

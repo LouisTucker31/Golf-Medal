@@ -26,6 +26,7 @@ const STATIC_ASSETS = [
   './js/stats-charts.js',
   './js/stats-ai.js',
   './js/stats-ui.js',
+  './js/stats-ui.js',
   './js/stats-app.js',
   './js/stats-search.js',
   './js/stats-input.js',

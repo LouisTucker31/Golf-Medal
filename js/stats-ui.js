@@ -12,7 +12,7 @@ const StatsUI = (() => {
     return val !== null && val !== undefined ? `${val}${suffix}` : '—';
   }
 
-  function renderOverview(overview, handicap, filter) {
+  function renderOverview(overview, handicap) {
     document.getElementById('statHandicap').textContent  = handicap !== null ? handicap : '—';
     document.getElementById('statRounds').textContent    = overview?.count   ?? '—';
     document.getElementById('statAvgGross').textContent  = fmt(overview?.avgGross);
@@ -23,31 +23,31 @@ const StatsUI = (() => {
   }
 
   function renderShots(shots, bandAvg, containerId) {
-    document.getElementById('statGIR').innerHTML       = `${fmt(shots?.gir, '%')} ${trendIcon(shots?.trends?.gir)}`;
-    document.getElementById('statFairways').innerHTML  = `${fmt(shots?.fairways, '%')} ${trendIcon(shots?.trends?.fairways)}`;
-    document.getElementById('statPutts').innerHTML     = `${fmt(shots?.putts)} ${trendIcon(shots?.trends?.putts)}`;
-    document.getElementById('statScrambling').innerHTML = `${fmt(shots?.scrambling, '%')} ${trendIcon(shots?.trends?.scrambling)}`;
+    document.getElementById('statGIR').innerHTML        = shots ? `${fmt(shots.gir, '%')} ${trendIcon(shots.trends?.gir)}` : '—';
+    document.getElementById('statFairways').innerHTML   = shots ? `${fmt(shots.fairways, '%')} ${trendIcon(shots.trends?.fairways)}` : '—';
+    document.getElementById('statPutts').innerHTML      = shots ? `${fmt(shots.putts)} ${trendIcon(shots.trends?.putts)}` : '—';
+    document.getElementById('statScrambling').innerHTML = shots ? `${fmt(shots.scrambling, '%')} ${trendIcon(shots.trends?.scrambling)}` : '—';
 
     if (shots && bandAvg) {
       StatsCharts.render(containerId, {
-        gir:       shots.gir,
-        fairways:  shots.fairways,
-        putts:     shots.putts,
+        gir:        shots.gir,
+        fairways:   shots.fairways,
+        putts:      shots.putts,
         scrambling: shots.scrambling,
       }, bandAvg, [
-        { key: 'gir',       label: 'GIR' },
-        { key: 'fairways',  label: 'FWY' },
+        { key: 'gir',        label: 'GIR' },
+        { key: 'fairways',   label: 'FWY' },
         { key: 'scrambling', label: 'SCR' },
       ]);
     }
   }
 
   function renderRecoveries(rec, bandAvg, containerId) {
-    document.getElementById('statUpDown').innerHTML   = `${fmt(rec?.updown, '%')} ${trendIcon(rec?.trends?.updown)}`;
-    document.getElementById('statSandSave').innerHTML = `${fmt(rec?.sandsave, '%')} ${trendIcon(rec?.trends?.sandsave)}`;
-    document.getElementById('statPenalties').textContent  = fmt(rec?.penalties);
-    document.getElementById('statRecoveries').textContent = fmt(rec?.recoveries);
-    document.getElementById('statBunkers').textContent    = fmt(rec?.bunkers);
+    document.getElementById('statUpDown').innerHTML       = rec ? `${fmt(rec.updown, '%')} ${trendIcon(rec.trends?.updown)}` : '—';
+    document.getElementById('statSandSave').innerHTML     = rec ? `${fmt(rec.sandsave, '%')} ${trendIcon(rec.trends?.sandsave)}` : '—';
+    document.getElementById('statPenalties').textContent  = rec ? fmt(rec.penalties)  : '—';
+    document.getElementById('statRecoveries').textContent = rec ? fmt(rec.recoveries) : '—';
+    document.getElementById('statBunkers').textContent    = rec ? fmt(rec.bunkers)    : '—';
 
     if (rec && bandAvg) {
       StatsCharts.render(containerId, {
@@ -60,22 +60,5 @@ const StatsUI = (() => {
     }
   }
 
-  async function renderAI(type, stats, handicap, cacheKey, elId) {
-    const el = document.getElementById(elId);
-    if (!el) return;
-    el.textContent = 'Generating insight…';
-
-    const result = await StatsAI.generate(type, stats, handicap, cacheKey);
-    if (result) {
-      el.textContent = result.text;
-      if (result.cached && result.updatedAt) {
-        const date = new Date(result.updatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-        el.insertAdjacentHTML('afterend', `<span class="ai-cached">Last updated ${date}</span>`);
-      }
-    } else {
-      el.textContent = '';
-    }
-  }
-
-  return { renderOverview, renderShots, renderRecoveries, renderAI, fmt, trendIcon };
+  return { renderOverview, renderShots, renderRecoveries, fmt, trendIcon };
 })();
