@@ -1,5 +1,5 @@
 // ── Stats App ──
-(() => {
+const StatsApp = (() => {
 
   let currentFilter = 'all';
 
@@ -28,4 +28,5 @@
 
   refresh();
 
+  return { refresh };
 })();

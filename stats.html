@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/stats.css" />
+  <link rel="stylesheet" href="css/stats-input.css" />
 </head>
 <body>
 
@@ -127,11 +128,152 @@
 
   </div>
 
+  <!-- Add Round floating button -->
+  <button class="add-round-btn" id="addRoundBtn" title="Add round">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+      <line x1="10" y1="4" x2="10" y2="16"/><line x1="4" y1="10" x2="16" y2="10"/>
+    </svg>
+  </button>
+
+  <!-- Add Round Modal -->
+  <div class="stats-modal-backdrop hidden" id="statsModalBackdrop">
+    <div class="stats-modal" id="statsModal">
+
+      <div class="stats-modal-header">
+        <h2 class="stats-modal-title" id="statsModalTitle">Add Round</h2>
+        <button class="stats-modal-close" id="statsModalClose">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <line x1="5" y1="5" x2="15" y2="15"/><line x1="15" y1="5" x2="5" y2="15"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="step-indicator">
+        <div class="step-dot active"></div>
+        <div class="step-dot"></div>
+      </div>
+
+      <!-- Step 1 — Course & Score -->
+      <div id="statsStep1">
+        <div class="field-group">
+          <label class="field-label">Course</label>
+          <div class="stats-search-wrap">
+            <svg class="stats-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="9" r="6"/><line x1="14.5" y1="14.5" x2="18" y2="18"/>
+            </svg>
+            <input type="text" class="stats-search-input" id="roundCourseInput" placeholder="Search course…" autocomplete="off" />
+            <div class="stats-search-dropdown hidden" id="roundCourseDropdown"></div>
+          </div>
+        </div>
+
+        <div class="field-group hidden" id="roundTeeGroup">
+          <label class="field-label">Tee</label>
+          <select class="field-input field-select" id="roundTeeSelect"></select>
+        </div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Holes</label>
+            <select class="field-input field-select" id="roundHoles">
+              <option value="18">18 holes</option>
+              <option value="front9">Front 9</option>
+              <option value="back9">Back 9</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Date</label>
+            <input class="field-input" type="date" id="roundDate" />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Gross Score</label>
+          <input class="field-input" type="number" id="roundGross" placeholder="89" min="50" max="200" />
+        </div>
+
+        <p class="stats-modal-error" id="statsModalError"></p>
+
+        <div class="stats-modal-actions">
+          <button class="submit-btn" id="statsStep1Next">Next →</button>
+        </div>
+      </div>
+
+      <!-- Step 2 — Shot Stats -->
+      <div id="statsStep2" class="hidden">
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">GIR (out of 18)</label>
+            <input class="field-input" type="number" id="roundGIR" placeholder="10" min="0" max="18" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Putts</label>
+            <input class="field-input" type="number" id="roundPutts" placeholder="32" min="0" max="72" />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Fairways Hit / Available</label>
+          <div class="input-pair">
+            <input class="field-input" type="number" id="roundFairwaysHit" placeholder="8" min="0" max="18" />
+            <span class="input-pair-sep">/</span>
+            <input class="field-input" type="number" id="roundFairwaysTotal" placeholder="14" min="0" max="18" />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Scrambling (saved / attempts)</label>
+          <div class="input-pair">
+            <input class="field-input" type="number" id="roundScramblingHit" placeholder="3" min="0" max="18" />
+            <span class="input-pair-sep">/</span>
+            <input class="field-input" type="number" id="roundScramblingTotal" placeholder="8" min="0" max="18" />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Sand Saves (saved / attempts)</label>
+          <div class="input-pair">
+            <input class="field-input" type="number" id="roundSandsaveHit" placeholder="1" min="0" max="18" />
+            <span class="input-pair-sep">/</span>
+            <input class="field-input" type="number" id="roundSandsaveTotal" placeholder="2" min="0" max="18" />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Penalties</label>
+            <input class="field-input" type="number" id="roundPenalties" placeholder="2" min="0" max="20" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Bunkers</label>
+            <input class="field-input" type="number" id="roundBunkers" placeholder="1" min="0" max="18" />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Recoveries</label>
+          <input class="field-input" type="number" id="roundRecoveries" placeholder="2" min="0" max="18" />
+        </div>
+
+        <div class="stats-modal-actions">
+          <button class="skip-btn" id="statsStep2Skip">Skip</button>
+          <button class="submit-btn" id="statsStep2Save">Save Round</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <script src="js/stats-data.js"></script>
   <script src="js/stats-calc.js"></script>
   <script src="js/stats-charts.js"></script>
   <script src="js/stats-ui.js"></script>
   <script src="js/stats-app.js"></script>
+  <script src="js/stats-search.js"></script>
+  <script src="js/stats-input.js"></script>
+  <script>
+    StatsInput.init();
+  </script>
 
 </body>
 </html>
