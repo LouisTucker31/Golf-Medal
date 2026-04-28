@@ -349,5 +349,5 @@ const StatsInput = (() => {
     });
   }
 
-  return { init, open, close };
+  return { init, open, close, openForEdit };
 })();
