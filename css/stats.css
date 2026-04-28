@@ -188,6 +188,28 @@
   font-style: normal;
 }
 
+/* ── History item force styles ── */
+.history-item {
+  list-style: none;
+}
+
+.history-course {
+  display: block;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.history-meta {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+.history-gross {
+  display: block;
+}
+
 /* ── Empty state ── */
 .stats-empty {
   display: flex;

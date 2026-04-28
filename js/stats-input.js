@@ -207,7 +207,6 @@ const StatsInput = (() => {
     // Shot stats — double if 9 holes
     const mult = is9 ? 2 : 1;
 
-    const mult = is9 ? 2 : 1;
     const totalHoles = is9 ? 9 : 18;
 
     const eagleOrBetter  = skipStats ? null : (parseInt(el('roundEagle')?.value)  || 0);
