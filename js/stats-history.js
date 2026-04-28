@@ -7,7 +7,7 @@ const StatsHistory = (() => {
     const container = document.getElementById('roundHistoryList');
     if (!container) return;
 
-    const rounds = StatsData.getRounds().slice().reverse();
+    const rounds = StatsData.getRounds().slice().sort((a, b) => new Date(b.date) - new Date(a.date));
 
     if (!rounds.length) {
       container.innerHTML = '<p class="history-empty">No rounds added yet.</p>';

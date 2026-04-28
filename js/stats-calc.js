@@ -36,8 +36,9 @@ const StatsCalc = (() => {
 
   function pct(rounds, hitKey, totalKey) {
     const totals = rounds.reduce((acc, r) => {
-      if (r[hitKey] !== null && r[totalKey] !== null) {
-        acc.hit   += r[hitKey]   || 0;
+      // Allow hit to be null/0 as long as total exists
+      if (r[totalKey] != null && r[totalKey] > 0) {
+        acc.hit   += r[hitKey]   ?? 0;
         acc.total += r[totalKey] || 0;
       }
       return acc;

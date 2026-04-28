@@ -2,10 +2,9 @@
 const StatsUI = (() => {
 
   function trendIcon(direction) {
-    if (direction === 'up')     return '<span class="trend trend--up">↗</span>';
-    if (direction === 'down')   return '<span class="trend trend--down">↘</span>';
-    if (direction === 'steady') return '<span class="trend trend--steady">→</span>';
-    if (direction === 'dash')   return '<span class="trend trend--dash" style="opacity:0.3">–</span>';
+    if (direction === 'up')     return '<span class="trend trend--up">▲</span>';
+    if (direction === 'down')   return '<span class="trend trend--down">▼</span>';
+    if (direction === 'steady') return '<span class="trend trend--steady">●</span>';
     return '';
   }
 
@@ -65,8 +64,8 @@ const StatsUI = (() => {
   }
 
   function renderRecoveries(rec, bandAvg, containerId) {
-    document.getElementById('statUpDown').innerHTML       = rec ? `${fmt(rec.updown, '%')} ${trendIcon(rec.trends?.updown)}` : '—';
-    document.getElementById('statSandSave').innerHTML     = rec ? `${fmt(rec.sandsave, '%')} ${trendIcon(rec.trends?.sandsave)}` : '—';
+    document.getElementById('statUpDown').innerHTML       = rec && rec.updown !== null   ? `${fmt(rec.updown, '%')} ${trendIcon(rec.trends?.updown)}`   : '—';
+    document.getElementById('statSandSave').innerHTML     = rec && rec.sandsave !== null ? `${fmt(rec.sandsave, '%')} ${trendIcon(rec.trends?.sandsave)}` : '—';
     document.getElementById('statPenalties').textContent  = rec ? fmt(rec.penalties)  : '—';
     document.getElementById('statRecoveries').textContent = rec ? fmt(rec.recoveries) : '—';
     document.getElementById('statBunkers').textContent    = rec ? fmt(rec.bunkers)    : '—';

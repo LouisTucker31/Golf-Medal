@@ -146,7 +146,7 @@ const StatsCharts = (() => {
     });
 
     // Legend
-    const legendY = height - 24;
+    const legendY = height - 10;
     const legendX = width - 100;
 
     const r1 = document.createElementNS(svgNS, 'rect');
